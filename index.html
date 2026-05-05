@@ -2,14 +2,16 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ياسر | مصمم جرافيك</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --deep-purple: #0f051a;
             --gold: #d4af37;
             --gold-gradient: linear-gradient(45deg, #bf953f, #fcf6ba, #aa771c);
+            --shine-gradient: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fcf6ba, #bf953f);
             --glass-glow: rgba(212, 175, 55, 0.4);
             --silk-gold: rgba(212, 175, 55, 0.15);
         }
@@ -18,7 +20,6 @@
             margin: 0; padding: 0; box-sizing: border-box; 
             font-family: 'Tajawal', sans-serif; 
             scroll-behavior: smooth; 
-            cursor: default; 
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -27,6 +28,81 @@
             color: white; 
             overflow-x: hidden; 
             min-height: 100vh;
+        }
+
+        /* --- منع التمرير أثناء شاشة التحميل --- */
+        body.loading-active {
+            overflow: hidden;
+        }
+
+        /* =========================================
+           شريط التقدم الذهبي (Scroll Progress)
+           ========================================= */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 0%;
+            height: 3px;
+            background: var(--gold-gradient);
+            z-index: 999999;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+            transition: width 0.1s ease-out;
+        }
+
+        /* =========================================
+           شاشة التحميل السينمائية (Cinematic Preloader)
+           ========================================= */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--deep-purple);
+            z-index: 9999999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        #preloader.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .preloader-logo {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 5px;
+            animation: pulsePreloader 1.5s infinite alternate;
+        }
+        .preloader-line {
+            width: 150px;
+            height: 2px;
+            background: rgba(212, 175, 55, 0.1);
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+        .preloader-line::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; height: 100%; width: 50%;
+            background: var(--gold-gradient);
+            animation: loadLine 1.5s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+        @keyframes pulsePreloader {
+            0% { transform: scale(0.95); opacity: 0.7; filter: drop-shadow(0 0 0 rgba(212, 175, 55, 0)); }
+            100% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); }
+        }
+        @keyframes loadLine {
+            0% { right: -50%; }
+            100% { right: 100%; }
         }
 
         /* --- نظام خيوط الحرير --- */
@@ -38,15 +114,9 @@
         }
 
         .fiber {
-            position: absolute; 
-            width: 180vw; height: 350px; 
-            background: transparent;
-            border-top: 1px solid var(--silk-gold);
-            border-radius: 50%;
-            will-change: transform;
-            transform: translate3d(0, 0, 0);
-            animation: luxuryWave 18s infinite ease-in-out;
-            pointer-events: none;
+            position: absolute; width: 180vw; height: 350px; background: transparent;
+            border-top: 1px solid var(--silk-gold); border-radius: 50%; will-change: transform;
+            transform: translate3d(0, 0, 0); animation: luxuryWave 18s infinite ease-in-out; pointer-events: none;
         }
 
         @keyframes luxuryWave {
@@ -61,189 +131,685 @@
         .fiber:nth-child(5) { top: 70%; left: -10%; animation-duration: 25s; }
         .fiber:nth-child(6) { top: 90%; right: -5%; animation-duration: 14s; }
 
-        /* --- الهيدر --- */
+        /* --- أنيميشن الظهور --- */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); will-change: opacity, transform; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+        .delay-400 { transition-delay: 0.4s; }
+
+        /* --- الهيدر والقائمة العلوية --- */
         nav {
             position: fixed; top: 0; width: 100%; padding: 15px 8%;
             display: flex; justify-content: space-between; align-items: center;
-            z-index: 100; background: rgba(15, 5, 26, 0.8); 
+            z-index: 1000; background: rgba(15, 5, 26, 0.8); 
             backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            animation: fadeInDown 1s ease forwards;
         }
+        
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .visitor-counter {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 6px 12px; border-radius: 50px; display: flex; align-items: center; gap: 8px; font-size: 0.75rem;
-        }
+        .main-menu { display: flex; gap: 30px; list-style: none; }
+        .main-menu a { color: white; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: 0.3s; position: relative; cursor: pointer; }
+        .main-menu a:hover { color: var(--gold); }
+        .main-menu a::after { content: ''; position: absolute; bottom: -5px; right: 0; width: 0%; height: 2px; background: var(--gold-gradient); transition: 0.3s ease; }
+        .main-menu a:hover::after { width: 100%; }
 
+        .visitor-counter { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(212, 175, 55, 0.2); padding: 6px 12px; border-radius: 50px; display: flex; align-items: center; gap: 8px; font-size: 0.75rem; }
         .pulse-dot { width: 6px; height: 6px; background-color: #2ecc71; border-radius: 50%; position: relative; }
         .pulse-dot::after { content: ''; position: absolute; width: 100%; height: 100%; background-color: #2ecc71; border-radius: 50%; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
 
-        /* --- العناوين --- */
-        .section-title-container { text-align: center; margin: 60px 0 40px; position: relative; }
-        .section-title-bg {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: clamp(4rem, 15vw, 8rem); font-weight: 800; color: rgba(255, 255, 255, 0.02);
-            white-space: nowrap; letter-spacing: 15px; z-index: -1;
+        /* --- القائمة الجانبية للجوال --- */
+        .mobile-toggle-btn { display: none; font-size: 1.5rem; color: var(--gold); background: none; border: none; cursor: pointer; }
+        .mobile-menu-overlay {
+            position: fixed; top: 0; right: -100%; width: 260px; height: 100vh;
+            background: rgba(10, 3, 18, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            z-index: 999; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-left: 1px solid rgba(212, 175, 55, 0.2);
+            display: flex; flex-direction: column; padding: 80px 20px 20px; gap: 20px;
         }
-        .section-title-main { font-size: clamp(1.8rem, 8vw, 2.8rem); font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .mobile-menu-overlay.active { right: 0; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
+        .mobile-menu-overlay a { color: white; text-decoration: none; font-size: 1.2rem; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; transition: 0.3s; }
+        .mobile-menu-overlay a:hover { color: var(--gold); padding-right: 10px; }
 
         /* --- الهيرو --- */
-        .hero { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 5%; }
-        .main-logo { width: 400px; max-width: 80vw; filter: drop-shadow(0 0 30px var(--glass-glow)); animation: float 5s infinite ease-in-out; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-
-        /* --- الأزرار والمدخلات --- */
-        .contact-card { max-width: 600px; margin: 0 auto; padding: 30px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 25px; backdrop-filter: blur(15px); }
-        .contact-input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid rgba(212,175,55,0.2); background: rgba(15, 5, 26, 0.7); color: white; outline: none; margin-bottom: 15px; transition: 0.3s; }
-        .contact-input:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(212,175,55,0.1); }
-        .social-btn { width: 100%; padding: 16px; border: 1px solid var(--gold); border-radius: 50px; background: transparent; color: white; font-weight: 800; cursor: pointer; transition: 0.4s; }
-        .social-btn:hover { background: var(--gold-gradient); color: var(--deep-purple); transform: scale(1.02); }
-
-        /* --- قائمة الأعمال --- */
-        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; padding: 0 8% 40px; }
-        .card-link { text-decoration: none; color: inherit; display: block; }
-        .premium-card {
-            position: relative; background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 25px;
-            backdrop-filter: blur(15px); overflow: hidden; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .hero { 
+            height: 100vh; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; text-align: center; 
+            padding: 0 5%; position: relative; z-index: 1;
         }
+        
+        .main-logo { 
+            width: 400px; max-width: 75vw; 
+            opacity: 0; filter: blur(15px); transform: scale(1.1) translateY(30px);
+            animation: cinematicLogoEntrance 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, floatingLuxury 6s ease-in-out infinite 1.5s;
+        }
+
+        @keyframes cinematicLogoEntrance { to { opacity: 1; filter: blur(0); transform: scale(1) translateY(0); } }
+        @keyframes floatingLuxury {
+            0%, 100% { transform: translateY(0); filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.1)); }
+            50% { transform: translateY(-15px); filter: drop-shadow(0 10px 25px rgba(212, 175, 55, 0.35)); }
+        }
+
+        .hero-title {
+            font-size: clamp(1.6rem, 6vw, 3rem); margin: 20px 0; font-weight: 800;
+            background: var(--shine-gradient); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            opacity: 0; transform: translateY(20px);
+            animation: textReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s forwards, shineGold 4s linear infinite;
+        }
+
+        .hero-subtitle {
+            letter-spacing: clamp(3px, 2vw, 10px); font-size: 0.7rem; color: white; opacity: 0; transform: translateY(20px);
+            animation: subtitleReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.8s forwards;
+        }
+
+        @keyframes textReveal { to { opacity: 1; transform: translateY(0); } }
+        @keyframes subtitleReveal { to { opacity: 0.6; transform: translateY(0); } }
+        @keyframes shineGold { to { background-position: 200% center; } }
+
+        /* --- العناوين الفرعية --- */
+        .section-title-container { text-align: center; margin: 60px 0 40px; position: relative; }
+        .section-title-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: clamp(3.5rem, 15vw, 8rem); font-weight: 800; color: rgba(255, 255, 255, 0.02); white-space: nowrap; letter-spacing: 15px; z-index: -1; }
+        .section-title-main { font-size: clamp(1.6rem, 8vw, 2.8rem); font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* --- البطاقات --- */
+        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 0 5% 40px; }
+        .portfolio-item { display: block; }
+        .card-link { text-decoration: none; color: inherit; display: block; cursor: pointer; }
+        .premium-card { position: relative; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 25px; backdrop-filter: blur(15px); overflow: hidden; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .card-link:hover .premium-card { transform: translateY(-10px); border-color: var(--gold); }
         .play-icon { font-size: 3rem; color: var(--gold); opacity: 0.5; transition: 0.3s; }
         .card-link:hover .play-icon { opacity: 1; transform: scale(1.1); }
 
+        .luxury-explore-wrapper { position: relative; display: flex; justify-content: center; margin-top: 10px; margin-bottom: 50px; padding: 0 5%; }
+        .luxury-explore-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 15px; padding: 20px 60px; background: rgba(15, 5, 26, 0.8); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 50px; color: var(--gold); font-size: 1.2rem; font-weight: 800; text-decoration: none; cursor: pointer; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); backdrop-filter: blur(10px); box-shadow: 0 0 20px rgba(212, 175, 55, 0.05); z-index: 2; width: 100%; max-width: 400px; }
+        .luxury-explore-btn::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 50px; border: 2px solid var(--gold); opacity: 0; animation: pulseRing 2.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1); z-index: -1; }
+        @keyframes pulseRing { 0% { transform: scale(0.95); opacity: 0.4; } 100% { transform: scale(1.15); opacity: 0; } }
+        .luxury-explore-btn:hover { background: var(--gold-gradient); color: var(--deep-purple); box-shadow: 0 15px 30px rgba(212, 175, 55, 0.3); border-color: transparent; transform: translateY(-5px); }
+        .luxury-explore-btn .arrow-icon { font-size: 1.4rem; transition: transform 0.4s ease; }
+        .luxury-explore-btn:hover .arrow-icon { transform: translateX(-12px); }
+
+        /* --- قسم الطلب --- */
+        .contact-card { 
+            max-width: 600px; margin: 0 auto; padding: 35px; background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 25px; backdrop-filter: blur(15px); position: relative;
+            width: 90%;
+        }
+        .input-group { margin-bottom: 20px; text-align: right; }
+        .input-group label { display: block; color: var(--gold); font-size: 0.9rem; font-weight: 800; margin-bottom: 8px; opacity: 0.9; }
+        .input-wrapper { position: relative; width: 100%; }
+        .input-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); opacity: 0.5; font-size: 1.1rem; pointer-events: none; }
+        .textarea-icon { top: 16px; transform: none; }
+        .contact-input { 
+            width: 100%; padding: 14px 45px 14px 14px; border-radius: 12px; 
+            border: 1px solid rgba(212,175,55,0.2); background: rgba(15, 5, 26, 0.7); 
+            color: white; outline: none; transition: 0.3s; 
+            font-size: 16px; 
+        }
+        .contact-input:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(212,175,55,0.1); background: rgba(15, 5, 26, 0.9); }
+        .contact-input::placeholder { color: rgba(255,255,255,0.4); font-weight: 300; font-size: 0.85rem; }
+        select.contact-input { appearance: none; -webkit-appearance: none; cursor: pointer; padding-left: 40px; }
+        .select-arrow { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); opacity: 0.5; pointer-events: none; font-size: 0.9rem; }
+        .submit-order-btn { width: 100%; padding: 16px; border: 1px solid var(--gold); border-radius: 50px; background: transparent; color: white; font-weight: 800; cursor: pointer; transition: 0.4s; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1rem; margin-top: 10px; }
+        .submit-order-btn:hover { background: var(--gold-gradient); color: var(--deep-purple); transform: scale(1.02); }
+
         /* --- آراء العملاء --- */
-        .testimonials-wrapper { overflow: hidden; padding: 20px 0 80px; position: relative; width: 100%; direction: ltr; }
-        .testimonials-track { display: flex; gap: 20px; width: max-content; animation: scrollReviews 60s linear infinite; }
+        .testimonials-wrapper { overflow: hidden; padding: 20px 0 80px; position: relative; width: 100%; direction: ltr; -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
+        .testimonials-track { display: flex; gap: 20px; width: max-content; animation: scrollReviews 40s linear infinite; padding: 20px 0; }
         .testimonials-track:hover { animation-play-state: paused; }
         @keyframes scrollReviews { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .testimonials-track:hover .testimonial-card { opacity: 0.4; filter: blur(2px); }
+        .testimonial-card { min-width: 300px; max-width: 300px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.02) 0%, rgba(15, 5, 26, 0.6) 100%); border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 20px; padding: 25px; backdrop-filter: blur(15px); direction: rtl; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; }
+        .testimonials-track .testimonial-card:hover { transform: translateY(-10px) scale(1.05); border-color: var(--gold); background: linear-gradient(145deg, rgba(212, 175, 55, 0.08) 0%, rgba(15, 5, 26, 0.9) 100%); box-shadow: 0 15px 35px rgba(212, 175, 55, 0.15); opacity: 1; filter: blur(0); z-index: 2; }
+        .quote-watermark { position: absolute; bottom: -10px; left: 15px; font-size: 5rem; color: var(--gold); opacity: 0.03; transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1); z-index: 0; pointer-events: none; }
+        .testimonial-card:hover .quote-watermark { opacity: 0.1; transform: scale(1.1) rotate(-5deg); }
+        .client-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; position: relative; z-index: 1; }
+        .user-icon-box { width: 45px; height: 45px; border-radius: 50%; background: rgba(212, 175, 55, 0.05); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1.1rem; font-weight: 800; border: 2px solid rgba(212, 175, 55, 0.3); box-shadow: inset 0 0 10px rgba(212, 175, 55, 0.2); }
+        .client-info { display: flex; flex-direction: column; gap: 5px; }
+        .client-name { font-size: 1rem; color: var(--gold); font-weight: 800; }
+        .stars-container { color: var(--gold); font-size: 0.7rem; letter-spacing: 2px; }
+        .comment { font-size: 0.85rem; line-height: 1.8; opacity: 0.85; font-weight: 300; position: relative; z-index: 1; }
 
-        .testimonial-card {
-            min-width: 300px; max-width: 300px; background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 20px;
-            padding: 25px; backdrop-filter: blur(15px); direction: rtl;
-            transition: all 0.4s ease;
+        /* --- الفوتر --- */
+        .main-footer { background: linear-gradient(to top, rgba(10, 3, 18, 0.8), rgba(15, 5, 26, 0.2)); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-top: 1px solid rgba(212, 175, 55, 0.2); box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.3); padding: 60px 5% 30px; margin-top: 50px; position: relative; z-index: 10; }
+        .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 30px; }
+        .footer-col h3 { color: var(--gold); font-size: 1.2rem; margin-bottom: 15px; font-weight: 800; }
+        .footer-col p { font-size: 0.9rem; line-height: 1.8; opacity: 0.7; }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 10px; }
+        .footer-links a { color: white; text-decoration: none; font-size: 0.9rem; transition: 0.3s; opacity: 0.7; display: inline-block; cursor: pointer; }
+        .footer-links a:hover { color: var(--gold); opacity: 1; transform: translateX(-8px); }
+        .footer-socials { display: flex; gap: 15px; margin-top: 15px; }
+        .social-icon { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.3); display: flex; align-items: center; justify-content: center; color: var(--gold); text-decoration: none; transition: 0.4s; font-size: 1.1rem; cursor: pointer; background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px); }
+        .social-icon:hover { background: var(--gold-gradient); color: var(--deep-purple); transform: translateY(-5px); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3); border-color: transparent; }
+        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(212, 175, 55, 0.1); opacity: 0.6; font-size: 0.8rem; }
+        .reveal-fade { opacity: 0; transition: opacity 1s ease; will-change: opacity; }
+        .reveal-fade.active { opacity: 0.6; }
+
+        /* --- المعرض المنبثق الكامل --- */
+        .full-gallery-overlay { position: fixed; inset: 0; width: 100vw; height: 100vh; background: transparent; z-index: 9999; overflow-y: auto; overflow-x: hidden; opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s ease; -webkit-overflow-scrolling: touch; }
+        .full-gallery-overlay.active { opacity: 1; visibility: visible; background: rgba(10, 3, 18, 0.4); }
+        .close-gallery-btn { position: fixed; top: 20px; left: 20px; width: 45px; height: 45px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1.2rem; cursor: pointer; z-index: 10000; transition: 0.4s; backdrop-filter: blur(10px); }
+        .close-gallery-btn:hover { background: var(--gold-gradient); color: var(--deep-purple); transform: rotate(90deg); }
+        .gallery-content-wrapper { padding: 80px 5% 50px; transform: translateY(60px) scale(0.95); opacity: 0; transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .full-gallery-overlay.active .gallery-content-wrapper { transform: translateY(0) scale(1); opacity: 1; transition-delay: 0.2s; }
+        .modal-portfolio-menu { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; }
+        .modal-filter-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 175, 55, 0.2); color: white; padding: 10px 20px; border-radius: 50px; font-size: 0.9rem; cursor: pointer; transition: 0.4s; backdrop-filter: blur(5px); }
+        .modal-filter-btn:hover, .modal-filter-btn.active { background: var(--gold-gradient); color: var(--deep-purple); font-weight: 800; border-color: transparent; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
+
+        /* --- الشات المباشر --- */
+        .chat-widget-btn { position: fixed; bottom: 20px; left: 20px; width: 60px; height: 60px; border-radius: 50%; background: var(--gold-gradient); color: var(--deep-purple); font-size: 1.6rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 5px 25px rgba(212, 175, 55, 0.4); z-index: 9998; border: none; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); animation: chatPulse 2.5s infinite; }
+        .chat-widget-btn:hover { transform: scale(1.1) rotate(10deg); }
+        .chat-window { position: fixed; bottom: 90px; left: 20px; width: calc(100% - 40px); max-width: 360px; background: rgba(10, 3, 18, 0.95); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5); z-index: 9998; display: flex; flex-direction: column; overflow: hidden; transform: translateY(30px) scale(0.9); opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform-origin: bottom left; }
+        .chat-window.active { transform: translateY(0) scale(1); opacity: 1; visibility: visible; }
+        .chat-header { background: rgba(255, 255, 255, 0.03); padding: 15px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(212, 175, 55, 0.1); position: relative; }
+        .chat-header-img { width: 40px; height: 40px; border-radius: 50%; background: var(--gold-gradient); display: flex; align-items: center; justify-content: center; color: var(--deep-purple); font-weight: bold; font-size: 1.1rem; }
+        .chat-header-info h4 { color: var(--gold); font-size: 0.95rem; margin-bottom: 2px; }
+        .chat-header-info p { color: white; font-size: 0.75rem; opacity: 0.7; display: flex; align-items: center; gap: 6px; }
+        .online-dot { width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #2ecc71; }
+        .close-chat { position: absolute; left: 15px; top: 20px; color: white; opacity: 0.5; cursor: pointer; transition: 0.3s; background: none; border: none; font-size: 1.2rem; }
+        .close-chat:hover { opacity: 1; color: var(--gold); }
+        .chat-body { padding: 15px; min-height: 250px; max-height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; }
+        .chat-msg { padding: 12px 16px; font-size: 0.9rem; line-height: 1.6; max-width: 85%; animation: popInMsg 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes popInMsg { from { opacity: 0; transform: scale(0.9) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .chat-msg.bot { background: rgba(212, 175, 55, 0.08); align-self: flex-start; border-radius: 15px 15px 0 15px; border: 1px solid rgba(212, 175, 55, 0.15); color: white; }
+        .chat-msg.user { background: var(--gold-gradient); align-self: flex-end; border-radius: 15px 15px 15px 0; color: var(--deep-purple); font-weight: 800; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2); }
+        .typing-indicator { display: flex; gap: 5px; padding: 12px 18px; background: rgba(212, 175, 55, 0.05); border-radius: 15px 15px 0 15px; align-self: flex-start; width: fit-content; }
+        .typing-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: typing 1.4s infinite ease-in-out both; opacity: 0.7; }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        .whatsapp-transfer-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; background: #25D366; color: white; border: none; padding: 10px 15px; border-radius: 10px; cursor: pointer; font-family: inherit; font-size: 0.85rem; font-weight: 800; text-decoration: none; transition: 0.3s; width: 100%; justify-content: center; }
+        .whatsapp-transfer-btn:hover { background: #1ebd5c; transform: scale(1.02); }
+        .chat-footer { padding: 15px; border-top: 1px solid rgba(212, 175, 55, 0.1); background: rgba(0, 0, 0, 0.2); }
+        .chat-input-wrapper { display: flex; gap: 10px; }
+        .chat-input { flex: 1; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px; padding: 12px 15px; color: white; font-family: inherit; font-size: 16px; outline: none; transition: 0.3s; }
+        .chat-input:focus { border-color: var(--gold); background: rgba(15, 5, 26, 0.8); }
+        .chat-send-btn { background: var(--gold-gradient); color: var(--deep-purple); border: none; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; font-size: 1.2rem; flex-shrink: 0; }
+        .chat-send-btn:hover { transform: scale(1.1); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4); }
+
+        /* =========================================
+           Media Queries (تطوير تجربة الجوال)
+           ========================================= */
+        @media (max-width: 768px) {
+            nav { padding: 15px 5%; }
+            .main-menu { display: none; }
+            .mobile-toggle-btn { display: block; }
+            .visitor-counter span:last-child { display: none; }
+            
+            .contact-card { padding: 25px 20px; border-radius: 20px; }
+            .section-title-bg { font-size: 3rem; letter-spacing: 5px; }
+            
+            .luxury-explore-btn { width: 100%; justify-content: center; padding: 18px 20px; font-size: 1.05rem; }
+            
+            .portfolio-grid { padding: 0; }
+            .gallery-content-wrapper { padding: 70px 15px 30px; }
+            .modal-portfolio-menu { margin-bottom: 30px; gap: 8px; }
+            
+            .main-footer { padding: 50px 5% 20px; }
+            .footer-container { gap: 30px; }
         }
-        .testimonial-card:hover { transform: translateY(-5px) scale(1.03); border-color: var(--gold); background: rgba(212, 175, 55, 0.05); }
-        .user-icon-box { width: 40px; height: 40px; border-radius: 10px; background: rgba(212, 175, 55, 0.1); display: flex; align-items: center; justify-content: center; color: var(--gold); font-weight: 800; border: 1px solid rgba(212, 175, 55, 0.2); }
-        .client-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-        .client-name { font-size: 0.9rem; color: var(--gold); font-weight: 800; }
-        .comment { font-size: 0.8rem; line-height: 1.6; opacity: 0.8; font-weight: 300; }
-
-        footer { text-align: center; padding: 40px; opacity: 0.4; font-size: 0.7rem; letter-spacing: 2px; }
     </style>
 </head>
-<body>
+<body class="loading-active">
 
+    <!-- =========================================
+         شريط التقدم الذهبي (Scroll Progress)
+         ========================================= -->
+    <div id="scroll-progress"></div>
+
+    <!-- =========================================
+         شاشة التحميل السينمائية (Cinematic Preloader)
+         ========================================= -->
+    <div id="preloader">
+        <div class="preloader-logo">YASSER GRAPHIC</div>
+        <div class="preloader-line"></div>
+    </div>
+
+    <!-- باقي الموقع -->
     <div class="glass-silk-container">
         <div class="fiber"></div><div class="fiber"></div><div class="fiber"></div><div class="fiber"></div>
         <div class="fiber"></div><div class="fiber"></div><div class="fiber"></div><div class="fiber"></div>
     </div>
 
     <nav>
-        <div style="font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.1rem;">YASSER GRAPHIC</div>
-        <div class="visitor-counter">
-            <span class="pulse-dot"></span>
-            <span>متواجد الآن: <strong id="live-count" style="color: var(--gold);">84</strong></span>
+        <div style="font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.1rem; z-index: 1001;">YASSER GRAPHIC</div>
+        
+        <ul class="main-menu">
+            <li><a href="#">الرئيسية</a></li>
+            <li><a href="#contact">اطلب تصميمك</a></li>
+            <li><a onclick="openFullGallery()">معرض الأعمال</a></li>
+            <li><a href="#reviews">آراء العملاء</a></li>
+        </ul>
+
+        <div style="display: flex; align-items: center; gap: 15px; z-index: 1001;">
+            <div class="visitor-counter">
+                <span class="pulse-dot"></span>
+                <span>متواجد الآن: <strong id="live-count" style="color: var(--gold);">84</strong></span>
+            </div>
+            <button class="mobile-toggle-btn" onclick="toggleMobileMenu()">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
         </div>
     </nav>
 
+    <div class="mobile-menu-overlay" id="mobile-menu">
+        <button class="mobile-toggle-btn" onclick="toggleMobileMenu()" style="align-self: flex-start; margin-bottom: 20px;">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <a href="#" onclick="toggleMobileMenu()">الرئيسية</a>
+        <a href="#contact" onclick="toggleMobileMenu()">اطلب تصميمك</a>
+        <a onclick="openFullGallery(); toggleMobileMenu();">معرض الأعمال</a>
+        <a href="#reviews" onclick="toggleMobileMenu()">آراء العملاء</a>
+    </div>
+
     <section class="hero">
         <img src="yaser-logo.png(1).png" alt="Yasser Logo" class="main-logo">
-        <h1 style="font-size: clamp(1.8rem, 6vw, 3rem); margin: 20px 0; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800;">وجهتك الأولى في عالم التصاميم</h1>
-        <p style="letter-spacing: clamp(5px, 2vw, 10px); opacity: 0.6; font-size: 0.7rem;">PREMIUM GRAPHIC DESIGNER</p>
+        <h1 class="hero-title">وجهتك الأولى في عالم التصاميم</h1>
+        <p class="hero-subtitle">PREMIUM GRAPHIC DESIGNER</p>
     </section>
 
-    <!-- (1) قسم الطلب أولاً -->
+    <!-- 1- قسم الطلب -->
     <section id="contact" style="padding: 40px 0;">
-        <div class="section-title-container">
+        <div class="section-title-container reveal">
             <div class="section-title-bg">ORDER</div>
             <h2 class="section-title-main">اطلب تصميمك الآن</h2>
         </div>
-        <div class="contact-card">
-            <div style="display: grid; gap: 5px; text-align: right;">
-                <label style="color: var(--gold); font-size: 0.9rem;">الأسم الكريم</label>
-                <input type="text" id="client_name" placeholder="أدخل اسمك هنا..." class="contact-input">
-                <label style="color: var(--gold); font-size: 0.9rem;">نوع الخدمة</label>
-                <select id="service_type" class="contact-input">
-                    <option value="هوية بصرية">هوية بصرية متكاملة</option>
-                    <option value="هوية بصرية">تصاميم سوشيال ميديا</option>
-                    <option value="هوية بصرية">تصميم منيو (مطاعم وكافيهات)</option>
-                    <option value="هوية بصرية">تصميم دعوات ومناسبات</option>
-                    <option value="مونتاج">تصميم فيديو (مونتاج)</option>
-                    <option value="لوجو">تصميم شعار (لوجو)</option>
-                </select>
-                <label style="color: var(--gold); font-size: 0.9rem;">التفاصيل</label>
-                <textarea id="project_details" rows="4" placeholder="اشرح لنا فكرتك..." class="contact-input"></textarea>
-                <button onclick="sendToWhatsApp()" class="social-btn">إرسال عبر واتساب</button>
+        
+        <div class="contact-card reveal delay-100">
+            <div class="input-group">
+                <label>الأسم الكريم</label>
+                <div class="input-wrapper">
+                    <i class="fa-regular fa-user input-icon"></i>
+                    <input type="text" id="client_name" placeholder="أدخل اسمك هنا..." class="contact-input">
+                </div>
             </div>
+            
+            <div class="input-group">
+                <label>نوع الخدمة</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-layer-group input-icon"></i>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
+                    <select id="service_type" class="contact-input">
+                        <option value="هوية بصرية">هوية بصرية متكاملة</option>
+                        <option value="تصاميم سوشيال ميديا">تصاميم سوشيال ميديا</option>
+                        <option value="تصميم منيو">تصميم منيو (مطاعم وكافيهات)</option>
+                        <option value="تصميم دعوات">تصميم دعوات ومناسبات</option>
+                        <option value="مونتاج">تصميم فيديو (مونتاج)</option>
+                        <option value="لوجو">تصميم شعار (لوجو)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label>التفاصيل</label>
+                <div class="input-wrapper">
+                    <i class="fa-regular fa-comment-dots input-icon textarea-icon"></i>
+                    <textarea id="project_details" rows="4" placeholder="اشرح لنا فكرتك أو متطلباتك بدقة..." class="contact-input"></textarea>
+                </div>
+            </div>
+            
+            <button onclick="sendToWhatsApp()" class="submit-order-btn">
+                <span>إرسال الطلب عبر واتساب</span>
+                <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i>
+            </button>
         </div>
     </section>
 
-    <!-- (2) قسم الفيديوهات الرائجة ثانياً -->
-    <section id="portfolio">
-        <div class="section-title-container">
+    <!-- 2- زر المعرض يليه 3- أبرز الأعمال -->
+    <section id="portfolio" style="padding-top: 40px;">
+        <div class="section-title-container reveal">
             <div class="section-title-bg">WORKS</div>
-            <h2 class="section-title-main">التصاميم الرائجة</h2>
+            <h2 class="section-title-main">أبرز التصاميم</h2>
         </div>
+
+        <div class="luxury-explore-wrapper reveal delay-100">
+            <button onclick="openFullGallery()" class="luxury-explore-btn">
+                <span class="btn-text">استكشف المعرض بالكامل</span>
+                <i class="fa-solid fa-arrow-left-long arrow-icon"></i>
+            </button>
+        </div>
+
         <div class="portfolio-grid">
-            <a href="https://www.youtube.com/watch?v=mU_WLBcPMNI" target="_blank" class="card-link">
+            <a href="https://www.youtube.com/watch?v=mU_WLBcPMNI" target="_blank" class="card-link reveal delay-200">
                 <div class="premium-card">
                     <div style="height: 200px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
                         <span class="play-icon">▶</span>
                     </div>
                     <div style="padding: 20px; text-align: center;">
                         <h3 style="color: var(--gold); font-size: 1.1rem;">تصميم اليوم الوطني 93</h3>
+                        <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">مونتاج</p>
                     </div>
                 </div>
             </a>
-            <a href="https://www.youtube.com/watch?v=O1Gq-J76m4M" target="_blank" class="card-link">
+            <a href="#" class="card-link reveal delay-300">
                 <div class="premium-card">
                     <div style="height: 200px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
-                        <span class="play-icon">▶</span>
+                        <span style="font-size: 2rem; color: var(--gold); opacity: 0.3;">Y</span>
                     </div>
                     <div style="padding: 20px; text-align: center;">
-                        <h3 style="color: var(--gold); font-size: 1.1rem;">أفخم تصميم ليوم التأسيس</h3>
+                        <h3 style="color: var(--gold); font-size: 1.1rem;">هوية بصرية متكاملة</h3>
+                        <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">هويات بصرية</p>
                     </div>
                 </div>
             </a>
         </div>
     </section>
 
-    <!-- (3) قسم آراء العملاء ثالثاً -->
+    <!-- 4- آراء العملاء -->
     <section id="reviews">
-        <div class="section-title-container">
+        <div class="section-title-container reveal">
             <div class="section-title-bg">REVIEWS</div>
-            <h2 class="section-title-main">اراء عملائنا</h2>
+            <h2 class="section-title-main">ثقة المبدعين</h2>
         </div>
-        <div class="testimonials-wrapper">
+        <div class="testimonials-wrapper reveal delay-100">
             <div class="testimonials-track" id="track">
                 <div class="testimonial-card">
-                    <div class="client-header"><div class="user-icon-box">A</div><div class="client-name">أحمد السعدي</div></div>
-                    <p class="comment">"عمل احترافي جداً، ياسر يفهم ما يدور في ذهن العميل ويحوله إلى واقع بصري مبهر."</p>
+                    <i class="fa-solid fa-quote-left quote-watermark"></i>
+                    <div class="client-header">
+                        <div class="user-icon-box">A</div>
+                        <div class="client-info">
+                            <div class="client-name">أحمد السعدي</div>
+                            <div class="stars-container">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="comment">"عمل احترافي جداً، ياسر يفهم ما يدور في ذهن العميل ويحوله إلى واقع بصري مبهر، تجربة تفوق الوصف."</p>
                 </div>
+                
                 <div class="testimonial-card">
-                    <div class="client-header"><div class="user-icon-box">N</div><div class="client-name">نورة الشهري</div></div>
-                    <p class="comment">"التزام بالمواعيد ودقة في التنفيذ. الشعارات التي صممها ياسر نقلت مشروعي لمستوى آخر."</p>
+                    <i class="fa-solid fa-quote-left quote-watermark"></i>
+                    <div class="client-header">
+                        <div class="user-icon-box">N</div>
+                        <div class="client-info">
+                            <div class="client-name">نورة الشهري</div>
+                            <div class="stars-container">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="comment">"التزام بالمواعيد ودقة في التنفيذ. الشعارات التي صممها ياسر نقلت مشروعي لمستوى آخر من الفخامة."</p>
                 </div>
+                
                 <div class="testimonial-card">
-                    <div class="client-header"><div class="user-icon-box">M</div><div class="client-name">محمد بن خالد</div></div>
-                    <p class="comment">"تصميم المنيو كان عصرياً وجذاباً جداً. لمسة فنية لا توصف في كل تفصيلة."</p>
+                    <i class="fa-solid fa-quote-left quote-watermark"></i>
+                    <div class="client-header">
+                        <div class="user-icon-box">M</div>
+                        <div class="client-info">
+                            <div class="client-name">محمد بن خالد</div>
+                            <div class="stars-container">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="comment">"تصميم المنيو كان عصرياً وجذاباً جداً. لمسة فنية لا توصف في كل تفصيلة، أنصح بالتعامل معه بشدة."</p>
                 </div>
+                
                 <div class="testimonial-card">
-                    <div class="client-header"><div class="user-icon-box">S</div><div class="client-name">سارة القحطاني</div></div>
-                    <p class="comment">"أفضل تجربة تصميم خضتها، ياسر شخص متعاون جداً ويهتم بكل بكسل في العمل."</p>
+                    <i class="fa-solid fa-quote-left quote-watermark"></i>
+                    <div class="client-header">
+                        <div class="user-icon-box">S</div>
+                        <div class="client-info">
+                            <div class="client-name">سارة القحطاني</div>
+                            <div class="stars-container">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="comment">"أفضل تجربة تصميم خضتها، ياسر شخص متعاون جداً ويهتم بكل بكسل في العمل ليخرجه بأفضل صورة."</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer>
-        © 2026 YASSER GRAPHIC | ALL RIGHTS RESERVED
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-col reveal delay-100">
+                <div style="font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.5rem; margin-bottom: 15px;">YASSER GRAPHIC</div>
+                <p>نصنع لك هويتك البصرية بدقة متناهية، ونحول أفكارك إلى تصاميم ولمسات فنية تليق بمشروعك.</p>
+            </div>
+            <div class="footer-col reveal delay-200">
+                <h3>روابط سريعة</h3>
+                <ul class="footer-links">
+                    <li><a href="#">الرئيسية</a></li>
+                    <li><a href="#contact">اطلب تصميمك</a></li>
+                    <li><a onclick="openFullGallery()">معرض الأعمال</a></li>
+                    <li><a href="#reviews">آراء العملاء</a></li>
+                </ul>
+            </div>
+            <div class="footer-col reveal delay-300">
+                <h3>تواصل معي</h3>
+                <p>دعنا نصنع شيئاً رائعاً معاً! متواجدون لخدمتكم والإجابة على استفساراتكم.</p>
+                <div class="footer-socials">
+                    <a href="https://wa.me/966593791001" target="_blank" class="social-icon" title="واتساب"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="mailto:your-email@example.com" class="social-icon" title="البريد الإلكتروني"><i class="fa-solid fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom reveal-fade delay-400">
+            جميع الحقوق محفوظة &copy; 2026 ياسر جرافيك
+        </div>
     </footer>
 
+    <!-- المساعد الذكي المدمج -->
+    <button class="chat-widget-btn" onclick="toggleChat()" title="تحدث معنا">
+        <i class="fa-regular fa-comment-dots"></i>
+    </button>
+
+    <div class="chat-window" id="live-chat-window">
+        <div class="chat-header">
+            <button class="close-chat" onclick="toggleChat()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="chat-header-img">
+                <i class="fa-solid fa-headset"></i>
+            </div>
+            <div class="chat-header-info">
+                <h4>المساعد الذكي | ياسر</h4>
+                <p><span class="online-dot"></span> متصل لمساعدتك</p>
+            </div>
+        </div>
+        
+        <div class="chat-body" id="chat-body-content">
+            <div class="chat-msg bot">
+                أهلاً بك في ياسر جرافيك! 🌟 <br>كيف يمكنني مساعدتك في تصميم مشروعك اليوم؟
+            </div>
+        </div>
+
+        <div class="chat-footer">
+            <div class="chat-input-wrapper">
+                <input type="text" id="live_chat_input" class="chat-input" placeholder="اكتب رسالتك هنا..." onkeypress="handleChatKeyPress(event)">
+                <button class="chat-send-btn" onclick="processSmartChat()" title="إرسال">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة المعرض المنبثق الكاملة -->
+    <div id="full-gallery" class="full-gallery-overlay">
+        
+        <div class="glass-silk-container" style="z-index: -1;">
+            <div class="fiber"></div><div class="fiber"></div><div class="fiber"></div><div class="fiber"></div>
+            <div class="fiber"></div><div class="fiber"></div><div class="fiber"></div><div class="fiber"></div>
+        </div>
+
+        <button class="close-gallery-btn" onclick="closeFullGallery()" title="إغلاق المعرض">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="gallery-content-wrapper">
+            <div class="section-title-container">
+                <div class="section-title-bg" style="font-size: clamp(3rem, 10vw, 6rem);">GALLERY</div>
+                <h2 class="section-title-main">المعرض المتكامل</h2>
+                <p style="opacity: 0.6; margin-top: 10px;">اكتشف عالمنا الإبداعي بجميع تفاصيله</p>
+            </div>
+
+            <div class="modal-portfolio-menu">
+                <button class="modal-filter-btn active" onclick="filterModalPortfolio('all', this)">الكل</button>
+                <button class="modal-filter-btn" onclick="filterModalPortfolio('branding', this)">هويات بصرية</button>
+                <button class="modal-filter-btn" onclick="filterModalPortfolio('logos', this)">شعارات</button>
+                <button class="modal-filter-btn" onclick="filterModalPortfolio('social', this)">سوشيال ميديا</button>
+                <button class="modal-filter-btn" onclick="filterModalPortfolio('prints', this)">مطبوعات</button>
+                <button class="modal-filter-btn" onclick="filterModalPortfolio('video', this)">مونتاج فيديو</button>
+            </div>
+
+            <div class="portfolio-grid">
+                
+                <a href="https://www.youtube.com/watch?v=mU_WLBcPMNI" target="_blank" class="card-link modal-portfolio-item video">
+                    <div class="premium-card">
+                        <div style="height: 220px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
+                            <span class="play-icon">▶</span>
+                        </div>
+                        <div style="padding: 20px; text-align: center;">
+                            <h3 style="color: var(--gold); font-size: 1.1rem;">تصميم اليوم الوطني 93</h3>
+                            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">مونتاج فيديو</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="card-link modal-portfolio-item branding">
+                    <div class="premium-card">
+                        <div style="height: 220px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 3rem; color: var(--gold); opacity: 0.3;"><i class="fa-solid fa-utensils"></i></span>
+                        </div>
+                        <div style="padding: 20px; text-align: center;">
+                            <h3 style="color: var(--gold); font-size: 1.1rem;">هوية مطعم فاخر</h3>
+                            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">هويات بصرية</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="card-link modal-portfolio-item social">
+                    <div class="premium-card">
+                        <div style="height: 220px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 3rem; color: var(--gold); opacity: 0.3;"><i class="fa-brands fa-instagram"></i></span>
+                        </div>
+                        <div style="padding: 20px; text-align: center;">
+                            <h3 style="color: var(--gold); font-size: 1.1rem;">إعلانات إنستجرام</h3>
+                            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">سوشيال ميديا</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="card-link modal-portfolio-item logos">
+                    <div class="premium-card">
+                        <div style="height: 220px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 3rem; color: var(--gold); opacity: 0.3;"><i class="fa-solid fa-building"></i></span>
+                        </div>
+                        <div style="padding: 20px; text-align: center;">
+                            <h3 style="color: var(--gold); font-size: 1.1rem;">شعار شركة عقارية</h3>
+                            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">شعارات</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="card-link modal-portfolio-item prints">
+                    <div class="premium-card">
+                        <div style="height: 220px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 3rem; color: var(--gold); opacity: 0.3;"><i class="fa-solid fa-print"></i></span>
+                        </div>
+                        <div style="padding: 20px; text-align: center;">
+                            <h3 style="color: var(--gold); font-size: 1.1rem;">تصميم بروشور تعريفي</h3>
+                            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">مطبوعات</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://www.youtube.com/watch?v=O1Gq-J76m4M" target="_blank" class="card-link modal-portfolio-item video">
+                    <div class="premium-card">
+                        <div style="height: 220px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
+                            <span class="play-icon">▶</span>
+                        </div>
+                        <div style="padding: 20px; text-align: center;">
+                            <h3 style="color: var(--gold); font-size: 1.1rem;">أفخم تصميم ليوم التأسيس</h3>
+                            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">مونتاج فيديو</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="card-link modal-portfolio-item social">
+                    <div class="premium-card">
+                        <div style="height: 220px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 3rem; color: var(--gold); opacity: 0.3;"><i class="fa-brands fa-x-twitter"></i></span>
+                        </div>
+                        <div style="padding: 20px; text-align: center;">
+                            <h3 style="color: var(--gold); font-size: 1.1rem;">تغطية منصة إكس</h3>
+                            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">سوشيال ميديا</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="card-link modal-portfolio-item prints">
+                    <div class="premium-card">
+                        <div style="height: 220px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 3rem; color: var(--gold); opacity: 0.3;"><i class="fa-solid fa-book-open"></i></span>
+                        </div>
+                        <div style="padding: 20px; text-align: center;">
+                            <h3 style="color: var(--gold); font-size: 1.1rem;">تصميم منيو مطعم</h3>
+                            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">مطبوعات</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="card-link modal-portfolio-item branding">
+                    <div class="premium-card">
+                        <div style="height: 220px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 3rem; color: var(--gold); opacity: 0.3;"><i class="fa-solid fa-bag-shopping"></i></span>
+                        </div>
+                        <div style="padding: 20px; text-align: center;">
+                            <h3 style="color: var(--gold); font-size: 1.1rem;">هوية متجر إلكتروني</h3>
+                            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">هويات بصرية</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="#" class="card-link modal-portfolio-item logos">
+                    <div class="premium-card">
+                        <div style="height: 220px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 3rem; color: var(--gold); opacity: 0.3;"><i class="fa-solid fa-mug-hot"></i></span>
+                        </div>
+                        <div style="padding: 20px; text-align: center;">
+                            <h3 style="color: var(--gold); font-size: 1.1rem;">شعار مقهى مختص</h3>
+                            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">شعارات</p>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </div>
+
     <script>
-        // مضاعفة الآراء للحركة المستمرة
+        // إزالة كلاس loading-active لإخفاء شاشة التحميل وإعادة التمرير
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const preloader = document.getElementById('preloader');
+                preloader.classList.add('hide');
+                document.body.classList.remove('loading-active');
+            }, 1500); // 1.5 ثانية لشاشة التحميل السينمائية
+        });
+
+        // حركة شريط التقدم الذهبي
+        window.addEventListener('scroll', function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scroll-progress').style.width = scrolled + '%';
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const reveals = document.querySelectorAll(".reveal, .reveal-fade");
+            const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -20px 0px" };
+            const revealOnScroll = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) { entry.target.classList.add("active"); }
+                });
+            }, revealOptions);
+            reveals.forEach(reveal => revealOnScroll.observe(reveal));
+        });
+
         const track = document.getElementById('track');
         track.innerHTML += track.innerHTML;
 
@@ -254,13 +820,128 @@
         }
         setInterval(updateVisitors, 5000);
 
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('active');
+        }
+
         function sendToWhatsApp() {
             const name = document.getElementById('client_name').value;
             const service = document.getElementById('service_type').value;
             const details = document.getElementById('project_details').value;
-            if(!name || !details) return alert("ياهلا حياك الله رجاء عبي البيانات ");
+            if(!name || !details) return alert("ياهلا حياك الله، رجاءً عبي البيانات");
             const message = `مرحباً أستاذ ياسر،%0aاستفسار عن طلب جديد:%0a*الأسم:* ${name}%0a*الخدمة:* ${service}%0a*التفاصيل:* ${details}`;
             window.open(`https://wa.me/966593791001?text=${message}`, '_blank');
+        }
+
+        let chatStep = 0;
+        let userConversation = [];
+
+        function toggleChat() {
+            const chatWindow = document.getElementById('live-chat-window');
+            chatWindow.classList.toggle('active');
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                processSmartChat();
+            }
+        }
+
+        function processSmartChat() {
+            const input = document.getElementById('live_chat_input');
+            const messageText = input.value.trim();
+            if (!messageText) return;
+
+            appendMessage(messageText, 'user');
+            userConversation.push(messageText);
+            input.value = '';
+
+            showTypingIndicator();
+
+            setTimeout(() => {
+                removeTypingIndicator();
+                
+                if (chatStep === 0) {
+                    appendMessage("فهمت عليك! اختيارك لياسر جرافيك هو الخطوة الأولى لنجاح مشروعك 🌟<br><br>ممكن تعطيني تفاصيل أكثر عن الفكرة التي في بالك لنبدأ العمل عليها؟", 'bot');
+                    chatStep++;
+                } else if (chatStep === 1) {
+                    let summaryText = encodeURIComponent(`مرحباً أستاذ ياسر،\nهذه تفاصيل طلبي من المساعد الذكي بالموقع:\n\n${userConversation.join('\n\n')}`);
+                    
+                    let replyHtml = `ممتاز جداً! سجلت كافة تفاصيل طلبك وعندي تصور رائع له.<br><br>
+                    حتى أتمكن من إرسال عرض السعر وتأكيد التفاصيل معك بشكل شخصي، تفضل بالانتقال لمحادثتي على الواتساب بضغطة زر (الملخص جاهز تلقائياً):<br>
+                    <a href="https://wa.me/966593791001?text=${summaryText}" target="_blank" class="whatsapp-transfer-btn">
+                        <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i> إكمال المحادثة شخصياً
+                    </a>`;
+                    
+                    appendMessage(replyHtml, 'bot');
+                    chatStep++;
+                } else {
+                    appendMessage("أنا في انتظارك على الواتساب للبدء في مشروعك! اضغط على الزر الأخضر أعلاه للتوجه مباشرة 🙏", 'bot');
+                }
+            }, 1500); 
+        }
+
+        function appendMessage(text, sender) {
+            const chatBody = document.getElementById('chat-body-content');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `chat-msg ${sender}`;
+            msgDiv.innerHTML = text;
+            chatBody.appendChild(msgDiv);
+            chatBody.scrollTop = chatBody.scrollHeight; 
+        }
+
+        function showTypingIndicator() {
+            const chatBody = document.getElementById('chat-body-content');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typing-indicator';
+            typingDiv.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+            chatBody.appendChild(typingDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typingDiv = document.getElementById('typing-indicator');
+            if (typingDiv) typingDiv.remove();
+        }
+
+        function openFullGallery() {
+            const gallery = document.getElementById('full-gallery');
+            gallery.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+            
+            const items = document.querySelectorAll('.modal-portfolio-item');
+            items.forEach((item, index) => {
+                item.style.animation = 'none';
+                item.offsetHeight; 
+                item.style.animation = `fadeInItem 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards ${index * 0.1}s`;
+            });
+        }
+
+        function closeFullGallery() {
+            document.getElementById('full-gallery').classList.remove('active');
+            document.body.style.overflow = 'auto'; 
+        }
+
+        function filterModalPortfolio(category, btnElement) {
+            const buttons = document.querySelectorAll('.modal-filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            const items = document.querySelectorAll('.modal-portfolio-item');
+            let visibleIndex = 0; 
+            
+            items.forEach((item) => {
+                if (category === 'all' || item.classList.contains(category)) {
+                    item.style.display = 'block';
+                    item.style.animation = 'none';
+                    item.offsetHeight; 
+                    item.style.animation = `fadeInItem 0.5s ease forwards ${visibleIndex * 0.05}s`;
+                    visibleIndex++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         }
     </script>
 </body>

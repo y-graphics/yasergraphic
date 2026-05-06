@@ -15,7 +15,7 @@
             --shine-gradient: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fcf6ba, #bf953f);
             --glass-glow: rgba(212, 175, 55, 0.4);
             --silk-gold: rgba(212, 175, 55, 0.15);
-            --yt-red: #ff0000; /* لون يوتيوب */
+            --yt-red: #ff0000;
         }
 
         * { 
@@ -50,6 +50,9 @@
             font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; background: var(--gold-gradient);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             letter-spacing: 8px; animation: pulsePreloader 1.5s infinite alternate;
+            direction: ltr;
+            text-align: center;
+            margin-left: 8px; 
         }
         .preloader-line { width: 150px; height: 2px; background: rgba(212, 175, 55, 0.1); margin-top: 20px; position: relative; overflow: hidden; border-radius: 5px; }
         .preloader-line::after { content: ''; position: absolute; top: 0; right: 0; height: 100%; width: 50%; background: var(--gold-gradient); animation: loadLine 1.5s ease-in-out infinite; box-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
@@ -74,7 +77,9 @@
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
         .nav-logo { font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.5rem; letter-spacing: 2px; }
-        .main-menu { display: flex; gap: 30px; list-style: none; }
+        
+        .main-menu { display: flex; gap: 30px; list-style: none; position: absolute; left: 50%; transform: translateX(-50%); }
+        
         .main-menu a { color: white; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: 0.3s; position: relative; cursor: pointer; }
         .main-menu a:hover { color: var(--gold); }
         .main-menu a::after { content: ''; position: absolute; bottom: -5px; right: 0; width: 0%; height: 2px; background: var(--gold-gradient); transition: 0.3s ease; }
@@ -137,15 +142,61 @@
         .play-icon { font-size: 3rem; color: var(--gold); opacity: 0.5; transition: 0.3s; }
         .card-link:hover .play-icon { opacity: 1; transform: scale(1.2); text-shadow: 0 0 20px rgba(212, 175, 55, 0.6); }
 
-        .luxury-explore-wrapper { position: relative; display: flex; justify-content: center; margin-top: 10px; margin-bottom: 50px; padding: 0 5%; }
         .luxury-explore-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 15px; padding: 18px 50px; background: rgba(15, 5, 26, 0.8); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 50px; color: var(--gold); font-size: 1.1rem; font-weight: 800; text-decoration: none; cursor: pointer; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); backdrop-filter: blur(10px); box-shadow: 0 0 20px rgba(212, 175, 55, 0.05); z-index: 2; width: 100%; max-width: 350px; }
         .luxury-explore-btn::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 50px; border: 2px solid var(--gold); opacity: 0; animation: pulseRing 2.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1); z-index: -1; }
         @keyframes pulseRing { 0% { transform: scale(0.95); opacity: 0.4; } 100% { transform: scale(1.15); opacity: 0; } }
         .luxury-explore-btn:hover { background: var(--gold-gradient); color: var(--deep-purple); box-shadow: 0 15px 30px rgba(212, 175, 55, 0.3); border-color: transparent; transform: translateY(-5px); }
         .luxury-explore-btn .arrow-icon { font-size: 1.2rem; transition: transform 0.4s ease; }
         .luxury-explore-btn:hover .arrow-icon { transform: translateX(-12px); }
+        .luxury-explore-wrapper { display: flex; justify-content: center; margin-bottom: 50px; }
 
-        /* --- قسم الطلب --- */
+        /* =========================================
+           حاسبة التسعير الذكية (Smart Pricing Estimator)
+           ========================================= */
+        .pricing-section { padding: 60px 0; position: relative; z-index: 2; }
+        .pricing-card { max-width: 900px; margin: 0 auto; padding: 40px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 25px; backdrop-filter: blur(15px); width: 90%; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+        
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        
+        .service-option { background: rgba(15, 5, 26, 0.7); border: 1px solid rgba(212,175,55,0.2); border-radius: 15px; padding: 20px 15px; text-align: center; cursor: pointer; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); user-select: none; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 130px; }
+        .service-option:hover { border-color: rgba(212,175,55,0.5); transform: translateY(-5px); background: rgba(212, 175, 55, 0.05); }
+        .service-option.selected { border-color: var(--gold); background: rgba(212,175,55,0.15); box-shadow: 0 10px 25px rgba(212,175,55,0.2); transform: translateY(-5px) scale(1.02); }
+        
+        .service-option i { font-size: 2rem; color: var(--gold); margin-bottom: 12px; opacity: 0.7; transition: 0.3s; }
+        .service-option.selected i { opacity: 1; transform: scale(1.15); text-shadow: 0 0 15px rgba(212, 175, 55, 0.6); }
+        
+        .service-option span { color: white; font-size: 0.95rem; font-weight: 500; transition: 0.3s; }
+        .service-option.selected span { color: var(--gold); font-weight: 800; }
+        
+        /* علامة صح التصميم الشخصي المخصصة */
+        .personal-design-toggle { display: flex; align-items: center; gap: 15px; background: rgba(15, 5, 26, 0.7); border: 1px solid rgba(212,175,55,0.2); border-radius: 15px; padding: 18px 20px; margin-bottom: 30px; cursor: pointer; transition: 0.3s; justify-content: flex-start; }
+        .personal-design-toggle:hover { border-color: rgba(212,175,55,0.5); background: rgba(212,175,55,0.05); }
+        .personal-design-toggle.active { border-color: var(--gold); background: rgba(212,175,55,0.15); box-shadow: 0 10px 25px rgba(212,175,55,0.1); }
+        
+        .checkbox-box { width: 28px; height: 28px; border: 2px solid rgba(212,175,55,0.5); border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: 0.3s; flex-shrink: 0; }
+        .personal-design-toggle.active .checkbox-box { background: var(--gold-gradient); border-color: transparent; }
+        .check-icon { color: var(--deep-purple); font-size: 1rem; opacity: 0; transform: scale(0.5); transition: 0.3s; font-weight: 900; }
+        .personal-design-toggle.active .check-icon { opacity: 1; transform: scale(1); }
+        
+        .toggle-text { display: flex; flex-direction: column; text-align: right; }
+        .toggle-text strong { color: white; font-size: 1.05rem; transition: 0.3s; }
+        .personal-design-toggle.active .toggle-text strong { color: var(--gold); font-weight: 800; }
+        .toggle-text .service-desc { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 5px; font-weight: 300; line-height: 1.5; transition: 0.3s;}
+        .personal-design-toggle.active .toggle-text .service-desc { color: rgba(255,255,255,0.9); }
+
+        .price-display { text-align: center; margin-bottom: 25px; padding: 25px; background: rgba(0,0,0,0.4); border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); position: relative; overflow: hidden; }
+        .price-display::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%); animation: rotateGlow 10s linear infinite; pointer-events: none; }
+        
+        .price-display p { opacity: 0.7; font-size: 0.95rem; margin-bottom: 5px; color: white; }
+        .price-display h3 { font-size: 3rem; color: white; text-shadow: 0 5px 15px rgba(212, 175, 55, 0.3); font-weight: 800; display: flex; align-items: baseline; justify-content: center; gap: 8px; margin: 0; direction: ltr; }
+        .price-display h3 span.currency { font-size: 1.2rem; color: var(--gold); font-weight: 500; }
+        .updating-price { color: var(--gold) !important; transform: scale(1.05); text-shadow: 0 0 25px rgba(212, 175, 55, 0.8) !important; transition: 0.3s; }
+
+        /* تاق الخصم الذكي */
+        .discount-badge { color: #2ecc71; font-size: 0.95rem; font-weight: bold; display: none; margin-top: 15px; animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.8) translateY(-10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+        /* --- قسم الطلب الكلاسيكي --- */
         .contact-card { max-width: 600px; margin: 0 auto; padding: 40px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 25px; backdrop-filter: blur(15px); position: relative; width: 90%; }
         .input-group { margin-bottom: 20px; text-align: right; }
         .input-group label { display: block; color: var(--gold); font-size: 0.9rem; font-weight: 800; margin-bottom: 8px; opacity: 0.9; }
@@ -161,19 +212,10 @@
         .submit-order-btn:hover { background: var(--gold-gradient); color: var(--deep-purple); transform: scale(1.02); }
 
         /* =========================================
-           إحصائيات اليوتيوب (YouTube Widget CSS)
+           إحصائيات اليوتيوب
            ========================================= */
-        .yt-live-widget {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 25px; padding: 40px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(212, 175, 55, 0.05);
-            width: 100%; max-width: 900px; margin: 0 auto; text-align: center; position: relative; overflow: hidden;
-        }
-        .yt-live-widget::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 60%);
-            animation: rotateGlow 10s linear infinite; z-index: 0; pointer-events: none;
-        }
+        .yt-live-widget { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 25px; padding: 40px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(212, 175, 55, 0.05); width: 100%; max-width: 900px; margin: 0 auto; text-align: center; position: relative; overflow: hidden; }
+        .yt-live-widget::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 60%); animation: rotateGlow 10s linear infinite; z-index: 0; pointer-events: none; }
         @keyframes rotateGlow { 100% { transform: rotate(360deg); } }
         .widget-content { position: relative; z-index: 1; }
         .yt-header { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 30px; border-bottom: 1px solid rgba(212, 175, 55, 0.1); padding-bottom: 20px; }
@@ -222,8 +264,8 @@
         .footer-socials { display: flex; gap: 15px; margin-top: 15px; }
         .social-icon { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.3); display: flex; align-items: center; justify-content: center; color: var(--gold); text-decoration: none; transition: 0.4s; font-size: 1.1rem; cursor: pointer; background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px); }
         .social-icon:hover { background: var(--gold-gradient); color: var(--deep-purple); transform: translateY(-5px); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3); border-color: transparent; }
-        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(212, 175, 55, 0.1); opacity: 0.6; font-size: 0.8rem; }
-        .reveal-fade { opacity: 0; transition: opacity 1s ease; will-change: opacity; } .reveal-fade.active { opacity: 0.6; }
+        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(212, 175, 55, 0.1); opacity: 0.9; font-size: 0.85rem; }
+        .reveal-fade { opacity: 0; transition: opacity 1s ease; will-change: opacity; } .reveal-fade.active { opacity: 1; }
 
         /* --- المعرض المنبثق الكامل والشات --- */
         .full-gallery-overlay { position: fixed; inset: 0; width: 100vw; height: 100vh; background: transparent; z-index: 9999; overflow-y: auto; overflow-x: hidden; opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s ease; -webkit-overflow-scrolling: touch; }
@@ -277,15 +319,32 @@
 
         @media (max-width: 768px) {
             nav { padding: 12px 20px; }
+            .nav-logo { font-size: 1.1rem; letter-spacing: 1px; } 
             .main-menu { display: none; }
             .mobile-toggle-btn { display: block; font-size: 1.6rem; }
             .counter-text { display: none; }
-            .visitor-counter { padding: 6px 12px; gap: 6px; font-size: 0.9rem; font-weight: bold; border-radius: 20px; background: rgba(212, 175, 55, 0.1); }
+            .visitor-counter { padding: 6px 12px; gap: 6px; font-size: 0.9rem; font-weight: bold; border-radius: 20px; background: rgba(212, 175, 55, 0.1); align-items: center; justify-content: center; }
+            .visitor-counter strong { line-height: 1; transform: translateY(1px); }
+            .pulse-dot { transform: translateY(-1px); margin-bottom: 2px; } 
             .main-logo { width: 260px; }
             .hero-title { font-size: 1.8rem; line-height: 1.4; padding: 0 10px; }
             .hero-subtitle { font-size: 0.65rem; letter-spacing: 4px; }
             .section-title-bg { font-size: 2.8rem; letter-spacing: 5px; }
             .section-title-main { font-size: 1.6rem; }
+            
+            /* تعديلات الحاسبة والموبايل */
+            .pricing-card { padding: 25px 15px; }
+            .services-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .service-option { min-height: 110px; padding: 15px 5px; }
+            .service-option i { font-size: 1.5rem; }
+            .service-option span { font-size: 0.8rem; }
+            
+            .personal-design-toggle { padding: 15px; margin-bottom: 20px; }
+            .toggle-text strong { font-size: 0.9rem; }
+            .toggle-text .service-desc { font-size: 0.7rem; }
+            
+            .price-display h3 { font-size: 2.2rem; }
+            
             .contact-card { padding: 30px 15px; border-radius: 20px; }
             .contact-input { font-size: 15px; padding: 14px 40px 14px 14px; border-radius: 12px; }
             .luxury-explore-btn { width: 90%; padding: 15px 20px; font-size: 1rem; }
@@ -294,13 +353,6 @@
             .gallery-content-wrapper { padding: 80px 15px 30px; }
             .modal-filter-btn { padding: 8px 16px; font-size: 0.85rem; margin-bottom: 5px; }
             .modal-portfolio-menu { gap: 8px; margin-bottom: 30px; }
-            .chat-widget-btn { width: 50px; height: 50px; font-size: 1.3rem; bottom: 15px; left: 15px; }
-            .chat-window { bottom: 75px; left: 15px; width: calc(100% - 30px); max-height: 70vh; border-radius: 15px; }
-            .chat-body { max-height: 45vh; padding: 10px; }
-            .chat-header { padding: 12px; }
-            .chat-msg { font-size: 0.85rem; padding: 10px 14px; }
-            .chat-input { font-size: 14px; padding: 10px 15px; }
-            .chat-send-btn { width: 40px; height: 40px; font-size: 1rem; }
             .testimonial-card { min-width: 280px; max-width: 280px; padding: 20px; border-radius: 15px; }
             .quote-watermark { font-size: 4rem; left: 10px; }
             .main-footer { padding: 40px 20px 20px; }
@@ -311,6 +363,15 @@
             .live-badge { position: relative; top: 0; left: 0; display: inline-flex; margin-bottom: 20px; }
             .yt-header { flex-direction: column; text-align: center; }
             .yt-stat-value { font-size: 2rem; }
+
+            /* تعديلات الشات للموبايل */
+            .chat-widget-btn { width: 50px; height: 50px; font-size: 1.3rem; bottom: 15px; left: 15px; }
+            .chat-window { bottom: 75px; left: 15px; width: calc(100% - 30px); max-height: 70vh; border-radius: 15px; }
+            .chat-body { max-height: 45vh; padding: 10px; }
+            .chat-header { padding: 12px; }
+            .chat-msg { font-size: 0.85rem; padding: 10px 14px; }
+            .chat-input { font-size: 14px; padding: 10px 15px; }
+            .chat-send-btn { width: 40px; height: 40px; font-size: 1rem; }
         }
     </style>
 </head>
@@ -336,6 +397,7 @@
         
         <ul class="main-menu">
             <li><a href="#">الرئيسية</a></li>
+            <li><a href="#pricing-estimator">حاسبة التسعير</a></li>
             <li><a href="#contact">اطلب تصميمك</a></li>
             <li><a onclick="openFullGallery()">معرض الأعمال</a></li>
             <li><a href="#youtube-section">قناتنا</a></li>
@@ -359,6 +421,7 @@
             <i class="fa-solid fa-xmark"></i>
         </button>
         <a href="#" onclick="toggleMobileMenu()">الرئيسية</a>
+        <a href="#pricing-estimator" onclick="toggleMobileMenu()">حاسبة التسعير</a>
         <a href="#contact" onclick="toggleMobileMenu()">اطلب تصميمك</a>
         <a onclick="openFullGallery(); toggleMobileMenu();">معرض الأعمال</a>
         <a href="#youtube-section" onclick="toggleMobileMenu()">قناتنا</a>
@@ -370,54 +433,7 @@
         <p class="hero-subtitle">PREMIUM GRAPHIC DESIGNER</p>
     </section>
 
-    <!-- 1- قسم الطلب -->
-    <section id="contact" style="padding: 40px 0;">
-        <div class="section-title-container reveal">
-            <div class="section-title-bg">ORDER</div>
-            <h2 class="section-title-main">اطلب تصميمك الآن</h2>
-        </div>
-        
-        <div class="contact-card reveal delay-100">
-            <div class="input-group">
-                <label>الأسم الكريم</label>
-                <div class="input-wrapper">
-                    <i class="fa-regular fa-user input-icon"></i>
-                    <input type="text" id="client_name" placeholder="أدخل اسمك هنا..." class="contact-input">
-                </div>
-            </div>
-            
-            <div class="input-group">
-                <label>نوع الخدمة</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-layer-group input-icon"></i>
-                    <i class="fa-solid fa-chevron-down select-arrow"></i>
-                    <select id="service_type" class="contact-input">
-                        <option value="هوية بصرية">هوية بصرية متكاملة</option>
-                        <option value="تصاميم سوشيال ميديا">تصاميم سوشيال ميديا</option>
-                        <option value="تصميم منيو">تصميم منيو (مطاعم وكافيهات)</option>
-                        <option value="تصميم دعوات">تصميم دعوات ومناسبات</option>
-                        <option value="مونتاج">تصميم فيديو (مونتاج)</option>
-                        <option value="لوجو">تصميم شعار (لوجو)</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="input-group">
-                <label>التفاصيل</label>
-                <div class="input-wrapper">
-                    <i class="fa-regular fa-comment-dots input-icon textarea-icon"></i>
-                    <textarea id="project_details" rows="4" placeholder="اشرح لنا فكرتك أو متطلباتك بدقة..." class="contact-input"></textarea>
-                </div>
-            </div>
-            
-            <button onclick="sendToWhatsApp()" class="submit-order-btn">
-                <span>إرسال الطلب عبر واتساب</span>
-                <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i>
-            </button>
-        </div>
-    </section>
-
-    <!-- 2- قسم أبرز الأعمال -->
+    <!-- الترتيب السينمائي: 1- قسم أبرز الأعمال -->
     <section id="portfolio" style="padding-top: 40px;">
         <div class="section-title-container reveal">
             <div class="section-title-bg">WORKS</div>
@@ -457,58 +473,7 @@
         </div>
     </section>
 
-    <!-- 3- إحصائيات اليوتيوب -->
-    <section id="youtube-section" style="padding-top: 40px;">
-        <div class="section-title-container reveal">
-            <div class="section-title-bg">YOUTUBE</div>
-            <h2 class="section-title-main">إحصائيات القناة المباشرة</h2>
-        </div>
-
-        <div style="display: flex; justify-content: center; padding: 0 5%;" class="reveal delay-100">
-            <div class="yt-live-widget">
-                <div class="widget-content">
-                    
-                    <div class="live-badge">
-                        <span class="dot"></span> LIVE STATS
-                    </div>
-        
-                    <div class="yt-header">
-                        <!-- مسار اللوجو وضعته افتراضياً كما في الهيرو -->
-                        <img src="yaser-logo.png(1).png" alt="Yaser Graphics" id="yt-avatar" class="yt-logo" onerror="this.src='https://via.placeholder.com/60/d4af37/0f051a?text=Y'">
-                        <div class="yt-title">
-                            <h2 id="yt-channel-name">Yaser Graphics</h2>
-                            <p>@yaser_grafhic</p>
-                        </div>
-                    </div>
-        
-                    <div class="yt-stats-container">
-                        <div class="yt-stat-box">
-                            <i class="fa-brands fa-youtube yt-stat-icon"></i>
-                            <div class="yt-stat-value" id="subscribers-count">0</div>
-                            <div class="yt-stat-label">المشتركون</div>
-                        </div>
-        
-                        <div class="yt-stat-box">
-                            <i class="fa-solid fa-eye yt-stat-icon"></i>
-                            <div class="yt-stat-value" id="views-count">0</div>
-                            <div class="yt-stat-label">إجمالي المشاهدات</div>
-                        </div>
-        
-                        <div class="yt-stat-box">
-                            <i class="fa-solid fa-video yt-stat-icon"></i>
-                            <div class="yt-stat-value" id="videos-count">0</div>
-                            <div class="yt-stat-label">عدد الفيديوهات</div>
-                        </div>
-                    </div>
-        
-                    <div class="status-msg" id="status-text">جاري الاتصال بخوادم يوتيوب...</div>
-        
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 4- آراء العملاء -->
+    <!-- الترتيب السينمائي: 2- آراء العملاء -->
     <section id="reviews" style="padding-top: 40px;">
         <div class="section-title-container reveal">
             <div class="section-title-bg">REVIEWS</div>
@@ -575,6 +540,171 @@
         </div>
     </section>
 
+    <!-- الترتيب السينمائي: 3- إحصائيات اليوتيوب -->
+    <section id="youtube-section" style="padding-top: 40px;">
+        <div class="section-title-container reveal">
+            <div class="section-title-bg">YOUTUBE</div>
+            <h2 class="section-title-main">إحصائيات القناة المباشرة</h2>
+        </div>
+
+        <div style="display: flex; justify-content: center; padding: 0 5%;" class="reveal delay-100">
+            <div class="yt-live-widget">
+                <div class="widget-content">
+                    
+                    <div class="live-badge">
+                        <span class="dot"></span> LIVE STATS
+                    </div>
+        
+                    <div class="yt-header">
+                        <img src="yaser-logo.png(1).png" alt="Yaser Graphics" id="yt-avatar" class="yt-logo" onerror="this.src='https://via.placeholder.com/60/d4af37/0f051a?text=Y'">
+                        <div class="yt-title">
+                            <h2 id="yt-channel-name">Yaser Graphics</h2>
+                            <p>@yaser_grafhic</p>
+                        </div>
+                    </div>
+        
+                    <div class="yt-stats-container">
+                        <div class="yt-stat-box">
+                            <i class="fa-brands fa-youtube yt-stat-icon"></i>
+                            <div class="yt-stat-value" id="subscribers-count">0</div>
+                            <div class="yt-stat-label">المشتركون</div>
+                        </div>
+        
+                        <div class="yt-stat-box">
+                            <i class="fa-solid fa-eye yt-stat-icon"></i>
+                            <div class="yt-stat-value" id="views-count">0</div>
+                            <div class="yt-stat-label">إجمالي المشاهدات</div>
+                        </div>
+        
+                        <div class="yt-stat-box">
+                            <i class="fa-solid fa-video yt-stat-icon"></i>
+                            <div class="yt-stat-value" id="videos-count">0</div>
+                            <div class="yt-stat-label">عدد الفيديوهات</div>
+                        </div>
+                    </div>
+        
+                    <div class="status-msg" id="status-text">جاري الاتصال بخوادم يوتيوب...</div>
+        
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- الترتيب السينمائي: 4- قسم حاسبة التسعير الذكية -->
+    <section id="pricing-estimator" class="pricing-section">
+        <div class="section-title-container reveal">
+            <div class="section-title-bg">ESTIMATE</div>
+            <h2 class="section-title-main">حاسبة التسعير الذكية</h2>
+            <p style="text-align:center; opacity:0.7; margin-top:10px; font-size: 0.9rem;">اختر الخدمات التي تحتاجها لتعرف التكلفة التقديرية المبدئية</p>
+        </div>
+        
+        <div class="pricing-card reveal delay-100">
+            <div class="services-grid">
+                
+                <div class="service-option" onclick="toggleSmartService(this)" data-price="500" data-name="تصميم شعار (لوجو)">
+                    <i class="fa-solid fa-pen-nib"></i>
+                    <span>تصميم شعار</span>
+                </div>
+                
+                <div class="service-option" onclick="toggleSmartService(this)" data-price="1500" data-name="هوية بصرية متكاملة">
+                    <i class="fa-solid fa-gem"></i>
+                    <span>هوية بصرية كاملة</span>
+                </div>
+                
+                <div class="service-option" onclick="toggleSmartService(this)" data-price="800" data-name="باقة سوشيال ميديا (10 تصاميم)">
+                    <i class="fa-brands fa-instagram"></i>
+                    <span>باقة سوشيال ميديا</span>
+                </div>
+                
+                <div class="service-option" onclick="toggleSmartService(this)" data-price="400" data-name="مونتاج فيديو إعلاني">
+                    <i class="fa-solid fa-video"></i>
+                    <span>مونتاج فيديو إعلاني</span>
+                </div>
+                
+                <div class="service-option" onclick="toggleSmartService(this)" data-price="500" data-name="مونتاج اليوم الوطني">
+                    <i class="fa-solid fa-flag"></i>
+                    <span>مونتاج اليوم الوطني</span>
+                </div>
+
+                <div class="service-option" onclick="toggleSmartService(this)" data-price="500" data-name="مونتاج يوم التأسيس">
+                    <i class="fa-solid fa-horse"></i>
+                    <span>مونتاج يوم التأسيس</span>
+                </div>
+
+            </div>
+
+            <!-- زر خيار التصميم الشخصي (علامة صح) يطبق الخصم بنسبة 50% -->
+            <div class="personal-design-toggle" onclick="togglePersonalDiscount(this)">
+                <div class="checkbox-box">
+                    <i class="fa-solid fa-check check-icon"></i>
+                </div>
+                <div class="toggle-text">
+                    <strong>هل الطلب للاستخدام الشخصي؟ (غير تجاري)</strong>
+                    <span class="service-desc">الاستخدام الشخصي يعني أن التصميم غير مخصص للأنشطة التجارية أو التربح (مثل الإهداءات والمناسبات الخاصة). باختيارك لهذا الخيار سيتم تطبيق خصم 50% على إجمالي الطلب.</span>
+                </div>
+            </div>
+            
+            <div class="price-display">
+                <p>التكلفة التقديرية المبدئية تبدأ من:</p>
+                <h3><span class="currency">ر.س</span> <div id="smart-total-price">0</div></h3>
+                <!-- رسالة الخصم اللي تظهر وتختفي -->
+                <div id="discount-badge" class="discount-badge"></div>
+            </div>
+            
+            <button onclick="sendEstimatorToWhatsApp()" class="submit-order-btn">
+                <span>إرسال الطلب المخصص عبر واتساب</span>
+                <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- الترتيب السينمائي: 5- قسم الطلب (الكلاسيكي) -->
+    <section id="contact" style="padding: 40px 0;">
+        <div class="section-title-container reveal">
+            <div class="section-title-bg">ORDER</div>
+            <h2 class="section-title-main">طلب مخصص</h2>
+        </div>
+        
+        <div class="contact-card reveal delay-100">
+            <div class="input-group">
+                <label>الأسم الكريم</label>
+                <div class="input-wrapper">
+                    <i class="fa-regular fa-user input-icon"></i>
+                    <input type="text" id="client_name" placeholder="أدخل اسمك هنا..." class="contact-input">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label>نوع الخدمة</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-layer-group input-icon"></i>
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
+                    <select id="service_type" class="contact-input">
+                        <option value="هوية بصرية">هوية بصرية متكاملة</option>
+                        <option value="تصاميم سوشيال ميديا">تصاميم سوشيال ميديا</option>
+                        <option value="تصميم منيو">تصميم منيو (مطاعم وكافيهات)</option>
+                        <option value="تصميم دعوات">تصميم دعوات ومناسبات</option>
+                        <option value="مونتاج">تصميم فيديو (مونتاج)</option>
+                        <option value="لوجو">تصميم شعار (لوجو)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label>التفاصيل</label>
+                <div class="input-wrapper">
+                    <i class="fa-regular fa-comment-dots input-icon textarea-icon"></i>
+                    <textarea id="project_details" rows="4" placeholder="اشرح لنا فكرتك أو متطلباتك بدقة..." class="contact-input"></textarea>
+                </div>
+            </div>
+            
+            <button onclick="sendToWhatsApp()" class="submit-order-btn">
+                <span>إرسال الطلب عبر واتساب</span>
+                <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i>
+            </button>
+        </div>
+    </section>
+
     <!-- الفوتر -->
     <footer class="main-footer">
         <div class="footer-container">
@@ -586,7 +716,7 @@
                 <h3>روابط سريعة</h3>
                 <ul class="footer-links">
                     <li><a href="#">الرئيسية</a></li>
-                    <li><a href="#contact">اطلب تصميمك</a></li>
+                    <li><a href="#pricing-estimator">اطلب تصميمك</a></li>
                     <li><a onclick="openFullGallery()">معرض الأعمال</a></li>
                     <li><a href="#youtube-section">قناتنا</a></li>
                 </ul>
@@ -600,8 +730,11 @@
                 </div>
             </div>
         </div>
+        
         <div class="footer-bottom reveal-fade delay-400">
-            جميع الحقوق محفوظة &copy; 2026 ياسر جرافيك
+            <ul class="bottom-menu" style="list-style: none; display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin: 0; padding: 0;">
+                <li style="color: var(--gold); font-weight: bold;">جميع الحقوق محفوظة &copy; 2026 ياسر جرافيك</li>
+            </ul>
         </div>
     </footer>
 
@@ -785,7 +918,6 @@
             init3DTilt();
         });
 
-        // تأثير البُعد الثالث للبطاقات
         function init3DTilt() {
             const cards = document.querySelectorAll('.premium-card');
             cards.forEach(card => {
@@ -823,7 +955,7 @@
         }
 
         // ==========================================
-        // 2. نظام التنبيهات والواتساب
+        // 2. نظام التنبيهات والواتساب الكلاسيكي
         // ==========================================
         function showCustomAlert(msg) {
             document.getElementById('custom-alert-message').innerText = msg;
@@ -965,10 +1097,8 @@
         }
 
         // ==========================================
-        // 5. سكربت إحصائيات يوتيوب المباشرة (Live Stats)
+        // 5. سكربت إحصائيات يوتيوب المباشرة
         // ==========================================
-        
-        // --- ضع مفتاح الـ API الخاص بك هنا ---
         const YT_API_KEY = 'AIzaSyCffEG4JLhCvoGozCZ7yLaOpi-wAU-USn8'; 
         const YT_CHANNEL_HANDLE = '@yaser_grafhic';
 
@@ -1042,7 +1172,6 @@
                     document.getElementById('status-text').innerText = "لم يتم العثور على بيانات القناة.";
                 }
             } catch (error) {
-                // وضع المحاكاة إذا لم يكن هناك مفتاح API
                 runYTSimulationMode(); 
             }
         }
@@ -1074,11 +1203,105 @@
             }
         }
 
-        // استدعاء دالة اليوتيوب عند فتح الموقع
         fetchYouTubeStats();
-        // التحديث كل 15 ثانية لجلب الأرقام المباشرة
         setInterval(fetchYouTubeStats, 15000); 
 
+        // ==========================================
+        // 6. سكربت حاسبة التسعير الذكية المطور (الخصم التلقائي)
+        // ==========================================
+        let smartCurrentTotal = 0;
+        let smartSelectedServices = [];
+        let isPersonalDesign = false;
+
+        function toggleSmartService(element) {
+            element.classList.toggle('selected');
+            calculateSmartTotal();
+        }
+
+        // دالة التبديل لعلامة الصح (الاستخدام الشخصي)
+        function togglePersonalDiscount(element) {
+            element.classList.toggle('active');
+            isPersonalDesign = element.classList.contains('active');
+            calculateSmartTotal();
+        }
+
+        function calculateSmartTotal() {
+            let baseTotal = 0;
+            smartSelectedServices = [];
+
+            // جمع أسعار الخدمات المحددة
+            const selectedEls = document.querySelectorAll('.service-option.selected');
+            selectedEls.forEach(el => {
+                const price = parseInt(el.getAttribute('data-price'));
+                const name = el.getAttribute('data-name');
+                baseTotal += price;
+                smartSelectedServices.push(name);
+            });
+
+            const discountBadge = document.getElementById('discount-badge');
+            
+            // تطبيق الخصم (50%) إذا كان مختار "تصميم شخصي" وفيه خدمات محددة
+            if (baseTotal > 0 && isPersonalDesign) {
+                let discountAmount = Math.floor(baseTotal * 0.50); // 50% خصم
+                smartCurrentTotal = baseTotal - discountAmount;
+                
+                discountBadge.style.display = 'block';
+                discountBadge.innerHTML = `<i class="fa-solid fa-tags"></i> تم تفعيل خصم التصميم الشخصي (-${discountAmount} ر.س)`;
+            } else {
+                smartCurrentTotal = baseTotal;
+                discountBadge.style.display = 'none';
+            }
+
+            // تحديث السعر الظاهر مع حركة مرنة
+            const priceElement = document.getElementById('smart-total-price');
+            priceElement.classList.add('updating-price');
+            animateSmartPriceCounter(priceElement, smartCurrentTotal);
+            
+            setTimeout(() => {
+                priceElement.classList.remove('updating-price');
+            }, 400);
+        }
+
+        function animateSmartPriceCounter(obj, endVal) {
+            let startVal = parseInt(obj.innerText.replace(/,/g, '')) || 0;
+            let duration = 600; 
+            let startTime = null;
+            
+            const step = (timestamp) => {
+                if (!startTime) startTime = timestamp;
+                const progress = Math.min((timestamp - startTime) / duration, 1);
+                const easeOutProgress = 1 - Math.pow(1 - progress, 3); 
+                const currentVal = Math.floor(easeOutProgress * (endVal - startVal) + startVal);
+                
+                obj.innerText = currentVal.toLocaleString();
+                
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    obj.innerText = endVal.toLocaleString();
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function sendEstimatorToWhatsApp() {
+            if (smartSelectedServices.length === 0) {
+                if(typeof showCustomAlert === "function") {
+                    showCustomAlert("ياهلا، الرجاء تحديد خدمة واحدة على الأقل لنتمكن من استقبال طلبك.");
+                } else {
+                    alert("الرجاء تحديد خدمة واحدة على الأقل.");
+                }
+                return;
+            }
+            
+            const servicesText = smartSelectedServices.map(s => `🔸 ${s}`).join('%0a');
+            const totalFormatted = smartCurrentTotal.toLocaleString();
+            const usageType = isPersonalDesign ? "✅ استخدام شخصي (غير تجاري) - تم تطبيق الخصم" : "❌ استخدام للعمل/تجاري";
+            
+            const message = `مرحباً أستاذ ياسر،%0aاستخدمت حاسبة التسعير الذكية في موقعك وأرغب بطلب الخدمات التالية:%0a%0a${servicesText}%0a%0a*نوع الاستخدام:* ${usageType}%0a*التكلفة التقديرية الظاهرة لي:* ${totalFormatted} ريال%0a%0aهل يمكننا مناقشة التفاصيل والبدء بالعمل؟`;
+            
+            window.open(`https://wa.me/966593791001?text=${message}`, '_blank');
+        }
     </script>
 </body>
 </html>

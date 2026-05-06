@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ياسر | مصمم جرافيك</title>
+    <!-- خط تجوال الموحد لجميع النصوص -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -14,6 +15,7 @@
             --shine-gradient: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fcf6ba, #bf953f);
             --glass-glow: rgba(212, 175, 55, 0.4);
             --silk-gold: rgba(212, 175, 55, 0.15);
+            --yt-red: #ff0000; /* لون يوتيوب */
         }
 
         * { 
@@ -30,100 +32,33 @@
             min-height: 100vh;
         }
 
-        /* --- منع التمرير أثناء شاشة التحميل --- */
-        body.loading-active {
-            overflow: hidden;
-        }
+        body.loading-active { overflow: hidden; }
 
-        /* =========================================
-           شريط التقدم الذهبي (Scroll Progress)
-           ========================================= */
         #scroll-progress {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 0%;
-            height: 3px;
-            background: var(--gold-gradient);
-            z-index: 999999;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
-            transition: width 0.1s ease-out;
+            position: fixed; top: 0; right: 0; width: 0%; height: 3px;
+            background: var(--gold-gradient); z-index: 999998;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.8); transition: width 0.1s ease-out;
         }
 
-        /* =========================================
-           شاشة التحميل السينمائية (Cinematic Preloader)
-           ========================================= */
         #preloader {
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            background: var(--deep-purple);
-            z-index: 9999999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
+            position: fixed; inset: 0; width: 100vw; height: 100vh;
+            background: var(--deep-purple); z-index: 9999999; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; transition: opacity 0.8s ease, visibility 0.8s ease;
         }
-        #preloader.hide {
-            opacity: 0;
-            visibility: hidden;
-        }
+        #preloader.hide { opacity: 0; visibility: hidden; }
         .preloader-logo {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 800;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 5px;
-            animation: pulsePreloader 1.5s infinite alternate;
+            font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; background: var(--gold-gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: 8px; animation: pulsePreloader 1.5s infinite alternate;
         }
-        .preloader-line {
-            width: 150px;
-            height: 2px;
-            background: rgba(212, 175, 55, 0.1);
-            margin-top: 20px;
-            position: relative;
-            overflow: hidden;
-            border-radius: 5px;
-        }
-        .preloader-line::after {
-            content: '';
-            position: absolute;
-            top: 0; right: 0; height: 100%; width: 50%;
-            background: var(--gold-gradient);
-            animation: loadLine 1.5s ease-in-out infinite;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-        }
-        @keyframes pulsePreloader {
-            0% { transform: scale(0.95); opacity: 0.7; filter: drop-shadow(0 0 0 rgba(212, 175, 55, 0)); }
-            100% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); }
-        }
-        @keyframes loadLine {
-            0% { right: -50%; }
-            100% { right: 100%; }
-        }
+        .preloader-line { width: 150px; height: 2px; background: rgba(212, 175, 55, 0.1); margin-top: 20px; position: relative; overflow: hidden; border-radius: 5px; }
+        .preloader-line::after { content: ''; position: absolute; top: 0; right: 0; height: 100%; width: 50%; background: var(--gold-gradient); animation: loadLine 1.5s ease-in-out infinite; box-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
+        @keyframes pulsePreloader { 0% { transform: scale(0.95); opacity: 0.7; filter: drop-shadow(0 0 0 rgba(212, 175, 55, 0)); } 100% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4)); } }
+        @keyframes loadLine { 0% { right: -50%; } 100% { right: 100%; } }
 
-        /* --- نظام خيوط الحرير --- */
-        .glass-silk-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            z-index: -1; overflow: hidden;
-            background: radial-gradient(circle at center, #1a0b2e 0%, var(--deep-purple) 100%);
-            contain: strict;
-        }
-
-        .fiber {
-            position: absolute; width: 180vw; height: 350px; background: transparent;
-            border-top: 1px solid var(--silk-gold); border-radius: 50%; will-change: transform;
-            transform: translate3d(0, 0, 0); animation: luxuryWave 18s infinite ease-in-out; pointer-events: none;
-        }
-
-        @keyframes luxuryWave {
-            0%, 100% { transform: translate3d(-10%, 0, 0) rotate(-2deg); }
-            50% { transform: translate3d(10%, 30px, 0) rotate(2deg); }
-        }
-
+        .glass-silk-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; background: radial-gradient(circle at center, #1a0b2e 0%, var(--deep-purple) 100%); contain: strict; }
+        .fiber { position: absolute; width: 180vw; height: 350px; background: transparent; border-top: 1px solid var(--silk-gold); border-radius: 50%; will-change: transform; transform: translate3d(0, 0, 0); animation: luxuryWave 18s infinite ease-in-out; pointer-events: none; }
+        @keyframes luxuryWave { 0%, 100% { transform: translate3d(-10%, 0, 0) rotate(-2deg); } 50% { transform: translate3d(10%, 30px, 0) rotate(2deg); } }
         .fiber:nth-child(1) { top: -10%; left: -5%; animation-duration: 12s; }
         .fiber:nth-child(2) { top: 10%; right: -10%; animation-duration: 15s; }
         .fiber:nth-child(3) { top: 30%; left: -15%; animation-duration: 20s; }
@@ -131,130 +66,132 @@
         .fiber:nth-child(5) { top: 70%; left: -10%; animation-duration: 25s; }
         .fiber:nth-child(6) { top: 90%; right: -5%; animation-duration: 14s; }
 
-        /* --- أنيميشن الظهور --- */
         .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); will-change: opacity, transform; }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        .delay-100 { transition-delay: 0.1s; }
-        .delay-200 { transition-delay: 0.2s; }
-        .delay-300 { transition-delay: 0.3s; }
-        .delay-400 { transition-delay: 0.4s; }
+        .delay-100 { transition-delay: 0.1s; } .delay-200 { transition-delay: 0.2s; } .delay-300 { transition-delay: 0.3s; } .delay-400 { transition-delay: 0.4s; }
 
-        /* --- الهيدر والقائمة العلوية --- */
-        nav {
-            position: fixed; top: 0; width: 100%; padding: 15px 8%;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000; background: rgba(15, 5, 26, 0.8); 
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-            animation: fadeInDown 1s ease forwards;
-        }
-        
+        nav { position: fixed; top: 0; width: 100%; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(15, 5, 26, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(212, 175, 55, 0.1); animation: fadeInDown 1s ease forwards; }
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
+        .nav-logo { font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.5rem; letter-spacing: 2px; }
         .main-menu { display: flex; gap: 30px; list-style: none; }
         .main-menu a { color: white; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: 0.3s; position: relative; cursor: pointer; }
         .main-menu a:hover { color: var(--gold); }
         .main-menu a::after { content: ''; position: absolute; bottom: -5px; right: 0; width: 0%; height: 2px; background: var(--gold-gradient); transition: 0.3s ease; }
         .main-menu a:hover::after { width: 100%; }
 
+        .nav-right-actions { display: flex; align-items: center; gap: 15px; }
         .visitor-counter { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(212, 175, 55, 0.2); padding: 6px 12px; border-radius: 50px; display: flex; align-items: center; gap: 8px; font-size: 0.75rem; }
         .pulse-dot { width: 6px; height: 6px; background-color: #2ecc71; border-radius: 50%; position: relative; }
         .pulse-dot::after { content: ''; position: absolute; width: 100%; height: 100%; background-color: #2ecc71; border-radius: 50%; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
-
-        /* --- القائمة الجانبية للجوال --- */
-        .mobile-toggle-btn { display: none; font-size: 1.5rem; color: var(--gold); background: none; border: none; cursor: pointer; }
-        .mobile-menu-overlay {
-            position: fixed; top: 0; right: -100%; width: 260px; height: 100vh;
-            background: rgba(10, 3, 18, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            z-index: 999; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            border-left: 1px solid rgba(212, 175, 55, 0.2);
-            display: flex; flex-direction: column; padding: 80px 20px 20px; gap: 20px;
-        }
-        .mobile-menu-overlay.active { right: 0; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
-        .mobile-menu-overlay a { color: white; text-decoration: none; font-size: 1.2rem; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; transition: 0.3s; }
-        .mobile-menu-overlay a:hover { color: var(--gold); padding-right: 10px; }
-
-        /* --- الهيرو --- */
-        .hero { 
-            height: 100vh; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; text-align: center; 
-            padding: 0 5%; position: relative; z-index: 1;
-        }
         
-        .main-logo { 
-            width: 400px; max-width: 75vw; 
-            opacity: 0; filter: blur(15px); transform: scale(1.1) translateY(30px);
-            animation: cinematicLogoEntrance 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, floatingLuxury 6s ease-in-out infinite 1.5s;
-        }
+        .mobile-toggle-btn { display: none; font-size: 1.5rem; color: var(--gold); background: none; border: none; cursor: pointer; transition: 0.3s; }
+        .mobile-menu-overlay { position: fixed; top: 0; right: -100%; width: 260px; height: 100vh; background: rgba(10, 3, 18, 0.98); backdrop-filter: blur(25px); z-index: 1005; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); border-left: 1px solid rgba(212, 175, 55, 0.2); display: flex; flex-direction: column; padding: 80px 20px 20px; gap: 20px; }
+        .mobile-menu-overlay.active { right: 0; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
+        .mobile-menu-overlay a { color: white; text-decoration: none; font-size: 1.1rem; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; transition: 0.3s; }
+        .mobile-menu-overlay a:hover { color: var(--gold); padding-right: 15px; }
+        .close-mobile-menu { position: absolute; top: 20px; right: 20px; font-size: 1.8rem; color: white; background: none; border: none; cursor: pointer; opacity: 0.7; transition: 0.3s; }
+        .close-mobile-menu:hover { opacity: 1; color: var(--gold); transform: rotate(90deg); }
 
+        .hero { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 5%; position: relative; z-index: 1; }
+        .main-logo { width: 350px; max-width: 70vw; opacity: 0; filter: blur(15px); transform: scale(1.1) translateY(30px); animation: cinematicLogoEntrance 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, floatingLuxury 6s ease-in-out infinite 1.5s; }
         @keyframes cinematicLogoEntrance { to { opacity: 1; filter: blur(0); transform: scale(1) translateY(0); } }
-        @keyframes floatingLuxury {
-            0%, 100% { transform: translateY(0); filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.1)); }
-            50% { transform: translateY(-15px); filter: drop-shadow(0 10px 25px rgba(212, 175, 55, 0.35)); }
-        }
-
-        .hero-title {
-            font-size: clamp(1.6rem, 6vw, 3rem); margin: 20px 0; font-weight: 800;
-            background: var(--shine-gradient); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            opacity: 0; transform: translateY(20px);
-            animation: textReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s forwards, shineGold 4s linear infinite;
-        }
-
-        .hero-subtitle {
-            letter-spacing: clamp(3px, 2vw, 10px); font-size: 0.7rem; color: white; opacity: 0; transform: translateY(20px);
-            animation: subtitleReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.8s forwards;
-        }
-
+        @keyframes floatingLuxury { 0%, 100% { transform: translateY(0); filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.1)); } 50% { transform: translateY(-15px); filter: drop-shadow(0 10px 25px rgba(212, 175, 55, 0.35)); } }
+        .hero-title { font-size: clamp(1.8rem, 6vw, 3rem); margin: 20px 0; font-weight: 800; background: var(--shine-gradient); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0; transform: translateY(20px); animation: textReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s forwards, shineGold 4s linear infinite; }
+        .hero-subtitle { letter-spacing: clamp(4px, 3vw, 15px); font-size: 1.1rem; color: white; opacity: 0; transform: translateY(20px); animation: subtitleReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.8s forwards; }
         @keyframes textReveal { to { opacity: 1; transform: translateY(0); } }
-        @keyframes subtitleReveal { to { opacity: 0.6; transform: translateY(0); } }
+        @keyframes subtitleReveal { to { opacity: 0.8; transform: translateY(0); } }
         @keyframes shineGold { to { background-position: 200% center; } }
 
-        /* --- العناوين الفرعية --- */
+        /* العناوين الفرعية */
         .section-title-container { text-align: center; margin: 60px 0 40px; position: relative; }
-        .section-title-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: clamp(3.5rem, 15vw, 8rem); font-weight: 800; color: rgba(255, 255, 255, 0.02); white-space: nowrap; letter-spacing: 15px; z-index: -1; }
+        .section-title-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: clamp(4rem, 18vw, 10rem); font-weight: 800; color: rgba(255, 255, 255, 0.03); white-space: nowrap; letter-spacing: 15px; z-index: -1; }
         .section-title-main { font-size: clamp(1.6rem, 8vw, 2.8rem); font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* --- البطاقات --- */
-        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 0 5% 40px; }
-        .portfolio-item { display: block; }
-        .card-link { text-decoration: none; color: inherit; display: block; cursor: pointer; }
-        .premium-card { position: relative; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 25px; backdrop-filter: blur(15px); overflow: hidden; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .card-link:hover .premium-card { transform: translateY(-10px); border-color: var(--gold); }
+        /* تأثير البُعد الثالث للبطاقات */
+        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; padding: 0 5% 40px; perspective: 1000px; }
+        .card-link { text-decoration: none; color: inherit; display: block; cursor: pointer; outline: none; }
+        
+        .premium-card {
+            position: relative; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 25px; 
+            backdrop-filter: blur(15px); overflow: hidden; 
+            transform-style: preserve-3d;
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.4s;
+            will-change: transform;
+        }
+        
+        .premium-card > div {
+            transform: translateZ(50px);
+            transition: transform 0.3s;
+        }
+
+        .premium-card::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at var(--mouseX, 50%) var(--mouseY, 50%), rgba(212, 175, 55, 0.25) 0%, transparent 60%);
+            opacity: 0; transition: opacity 0.4s; pointer-events: none; z-index: 10;
+        }
+        
+        .premium-card:hover { border-color: rgba(212, 175, 55, 0.8); }
+        .premium-card:hover::before { opacity: 1; }
+        
         .play-icon { font-size: 3rem; color: var(--gold); opacity: 0.5; transition: 0.3s; }
-        .card-link:hover .play-icon { opacity: 1; transform: scale(1.1); }
+        .card-link:hover .play-icon { opacity: 1; transform: scale(1.2); text-shadow: 0 0 20px rgba(212, 175, 55, 0.6); }
 
         .luxury-explore-wrapper { position: relative; display: flex; justify-content: center; margin-top: 10px; margin-bottom: 50px; padding: 0 5%; }
-        .luxury-explore-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 15px; padding: 20px 60px; background: rgba(15, 5, 26, 0.8); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 50px; color: var(--gold); font-size: 1.2rem; font-weight: 800; text-decoration: none; cursor: pointer; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); backdrop-filter: blur(10px); box-shadow: 0 0 20px rgba(212, 175, 55, 0.05); z-index: 2; width: 100%; max-width: 400px; }
+        .luxury-explore-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 15px; padding: 18px 50px; background: rgba(15, 5, 26, 0.8); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 50px; color: var(--gold); font-size: 1.1rem; font-weight: 800; text-decoration: none; cursor: pointer; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); backdrop-filter: blur(10px); box-shadow: 0 0 20px rgba(212, 175, 55, 0.05); z-index: 2; width: 100%; max-width: 350px; }
         .luxury-explore-btn::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 50px; border: 2px solid var(--gold); opacity: 0; animation: pulseRing 2.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1); z-index: -1; }
         @keyframes pulseRing { 0% { transform: scale(0.95); opacity: 0.4; } 100% { transform: scale(1.15); opacity: 0; } }
         .luxury-explore-btn:hover { background: var(--gold-gradient); color: var(--deep-purple); box-shadow: 0 15px 30px rgba(212, 175, 55, 0.3); border-color: transparent; transform: translateY(-5px); }
-        .luxury-explore-btn .arrow-icon { font-size: 1.4rem; transition: transform 0.4s ease; }
+        .luxury-explore-btn .arrow-icon { font-size: 1.2rem; transition: transform 0.4s ease; }
         .luxury-explore-btn:hover .arrow-icon { transform: translateX(-12px); }
 
         /* --- قسم الطلب --- */
-        .contact-card { 
-            max-width: 600px; margin: 0 auto; padding: 35px; background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 25px; backdrop-filter: blur(15px); position: relative;
-            width: 90%;
-        }
+        .contact-card { max-width: 600px; margin: 0 auto; padding: 40px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 25px; backdrop-filter: blur(15px); position: relative; width: 90%; }
         .input-group { margin-bottom: 20px; text-align: right; }
         .input-group label { display: block; color: var(--gold); font-size: 0.9rem; font-weight: 800; margin-bottom: 8px; opacity: 0.9; }
         .input-wrapper { position: relative; width: 100%; }
         .input-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); opacity: 0.5; font-size: 1.1rem; pointer-events: none; }
         .textarea-icon { top: 16px; transform: none; }
-        .contact-input { 
-            width: 100%; padding: 14px 45px 14px 14px; border-radius: 12px; 
-            border: 1px solid rgba(212,175,55,0.2); background: rgba(15, 5, 26, 0.7); 
-            color: white; outline: none; transition: 0.3s; 
-            font-size: 16px; 
-        }
+        .contact-input { width: 100%; padding: 15px 45px 15px 15px; border-radius: 15px; border: 1px solid rgba(212,175,55,0.2); background: rgba(15, 5, 26, 0.7); color: white; outline: none; transition: 0.3s; font-size: 16px; }
         .contact-input:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(212,175,55,0.1); background: rgba(15, 5, 26, 0.9); }
         .contact-input::placeholder { color: rgba(255,255,255,0.4); font-weight: 300; font-size: 0.85rem; }
         select.contact-input { appearance: none; -webkit-appearance: none; cursor: pointer; padding-left: 40px; }
         .select-arrow { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); opacity: 0.5; pointer-events: none; font-size: 0.9rem; }
-        .submit-order-btn { width: 100%; padding: 16px; border: 1px solid var(--gold); border-radius: 50px; background: transparent; color: white; font-weight: 800; cursor: pointer; transition: 0.4s; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1rem; margin-top: 10px; }
+        .submit-order-btn { width: 100%; padding: 18px; border: 1px solid var(--gold); border-radius: 50px; background: transparent; color: white; font-weight: 800; cursor: pointer; transition: 0.4s; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.05rem; margin-top: 15px; }
         .submit-order-btn:hover { background: var(--gold-gradient); color: var(--deep-purple); transform: scale(1.02); }
+
+        /* =========================================
+           إحصائيات اليوتيوب (YouTube Widget CSS)
+           ========================================= */
+        .yt-live-widget {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 25px; padding: 40px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(212, 175, 55, 0.05);
+            width: 100%; max-width: 900px; margin: 0 auto; text-align: center; position: relative; overflow: hidden;
+        }
+        .yt-live-widget::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 60%);
+            animation: rotateGlow 10s linear infinite; z-index: 0; pointer-events: none;
+        }
+        @keyframes rotateGlow { 100% { transform: rotate(360deg); } }
+        .widget-content { position: relative; z-index: 1; }
+        .yt-header { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 30px; border-bottom: 1px solid rgba(212, 175, 55, 0.1); padding-bottom: 20px; }
+        .yt-logo { width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--gold); padding: 2px; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); background: var(--deep-purple); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--gold); }
+        .yt-title h2 { margin: 0; font-size: 1.5rem; font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .yt-title p { margin: 5px 0 0; color: rgba(255,255,255,0.6); font-size: 0.9rem; letter-spacing: 1px; }
+        .live-badge { position: absolute; top: 30px; left: 30px; background: rgba(255, 0, 0, 0.1); border: 1px solid rgba(255, 0, 0, 0.3); color: white; padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; display: flex; align-items: center; gap: 8px; letter-spacing: 1px; direction: ltr; }
+        .live-badge .dot { width: 8px; height: 8px; background: var(--yt-red); border-radius: 50%; animation: livePulse 1.5s infinite; }
+        @keyframes livePulse { 0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); } }
+        .yt-stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .yt-stat-box { background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 25px 15px; transition: 0.3s; }
+        .yt-stat-box:hover { border-color: var(--gold); transform: translateY(-5px); background: rgba(212, 175, 55, 0.05); }
+        .yt-stat-icon { font-size: 2rem; color: var(--gold); margin-bottom: 10px; opacity: 0.8; }
+        .yt-stat-box:nth-child(1) .yt-stat-icon { color: var(--yt-red); }
+        .yt-stat-value { font-size: 2.5rem; font-weight: 800; color: white; text-shadow: 0 5px 15px rgba(212, 175, 55, 0.2); transition: all 0.3s ease-out; display: inline-block; direction: ltr; }
+        .yt-stat-label { font-size: 0.9rem; color: rgba(255,255,255,0.7); font-weight: 500; margin-top: 5px; }
+        .yt-stat-value.updating { color: var(--gold); transform: scale(1.1); text-shadow: 0 0 20px rgba(212, 175, 55, 0.8); }
+        .status-msg { margin-top: 20px; font-size: 0.85rem; color: rgba(255,255,255,0.4); }
 
         /* --- آراء العملاء --- */
         .testimonials-wrapper { overflow: hidden; padding: 20px 0 80px; position: relative; width: 100%; direction: ltr; -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
@@ -262,7 +199,7 @@
         .testimonials-track:hover { animation-play-state: paused; }
         @keyframes scrollReviews { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .testimonials-track:hover .testimonial-card { opacity: 0.4; filter: blur(2px); }
-        .testimonial-card { min-width: 300px; max-width: 300px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.02) 0%, rgba(15, 5, 26, 0.6) 100%); border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 20px; padding: 25px; backdrop-filter: blur(15px); direction: rtl; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; }
+        .testimonial-card { min-width: 320px; max-width: 320px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.02) 0%, rgba(15, 5, 26, 0.6) 100%); border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 20px; padding: 25px; backdrop-filter: blur(15px); direction: rtl; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; }
         .testimonials-track .testimonial-card:hover { transform: translateY(-10px) scale(1.05); border-color: var(--gold); background: linear-gradient(145deg, rgba(212, 175, 55, 0.08) 0%, rgba(15, 5, 26, 0.9) 100%); box-shadow: 0 15px 35px rgba(212, 175, 55, 0.15); opacity: 1; filter: blur(0); z-index: 2; }
         .quote-watermark { position: absolute; bottom: -10px; left: 15px; font-size: 5rem; color: var(--gold); opacity: 0.03; transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1); z-index: 0; pointer-events: none; }
         .testimonial-card:hover .quote-watermark { opacity: 0.1; transform: scale(1.1) rotate(-5deg); }
@@ -274,7 +211,7 @@
         .comment { font-size: 0.85rem; line-height: 1.8; opacity: 0.85; font-weight: 300; position: relative; z-index: 1; }
 
         /* --- الفوتر --- */
-        .main-footer { background: linear-gradient(to top, rgba(10, 3, 18, 0.8), rgba(15, 5, 26, 0.2)); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-top: 1px solid rgba(212, 175, 55, 0.2); box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.3); padding: 60px 5% 30px; margin-top: 50px; position: relative; z-index: 10; }
+        .main-footer { background: linear-gradient(to top, rgba(10, 3, 18, 0.8), rgba(15, 5, 26, 0.2)); backdrop-filter: blur(30px); border-top: 1px solid rgba(212, 175, 55, 0.2); box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.3); padding: 60px 5% 30px; margin-top: 50px; position: relative; z-index: 10; }
         .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 30px; }
         .footer-col h3 { color: var(--gold); font-size: 1.2rem; margin-bottom: 15px; font-weight: 800; }
         .footer-col p { font-size: 0.9rem; line-height: 1.8; opacity: 0.7; }
@@ -286,12 +223,11 @@
         .social-icon { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.3); display: flex; align-items: center; justify-content: center; color: var(--gold); text-decoration: none; transition: 0.4s; font-size: 1.1rem; cursor: pointer; background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px); }
         .social-icon:hover { background: var(--gold-gradient); color: var(--deep-purple); transform: translateY(-5px); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3); border-color: transparent; }
         .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(212, 175, 55, 0.1); opacity: 0.6; font-size: 0.8rem; }
-        .reveal-fade { opacity: 0; transition: opacity 1s ease; will-change: opacity; }
-        .reveal-fade.active { opacity: 0.6; }
+        .reveal-fade { opacity: 0; transition: opacity 1s ease; will-change: opacity; } .reveal-fade.active { opacity: 0.6; }
 
-        /* --- المعرض المنبثق الكامل --- */
+        /* --- المعرض المنبثق الكامل والشات --- */
         .full-gallery-overlay { position: fixed; inset: 0; width: 100vw; height: 100vh; background: transparent; z-index: 9999; overflow-y: auto; overflow-x: hidden; opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s ease; -webkit-overflow-scrolling: touch; }
-        .full-gallery-overlay.active { opacity: 1; visibility: visible; background: rgba(10, 3, 18, 0.4); }
+        .full-gallery-overlay.active { opacity: 1; visibility: visible; background: rgba(10, 3, 18, 0.8); backdrop-filter: blur(10px); }
         .close-gallery-btn { position: fixed; top: 20px; left: 20px; width: 45px; height: 45px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1.2rem; cursor: pointer; z-index: 10000; transition: 0.4s; backdrop-filter: blur(10px); }
         .close-gallery-btn:hover { background: var(--gold-gradient); color: var(--deep-purple); transform: rotate(90deg); }
         .gallery-content-wrapper { padding: 80px 5% 50px; transform: translateY(60px) scale(0.95); opacity: 0; transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -299,11 +235,12 @@
         .modal-portfolio-menu { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; }
         .modal-filter-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 175, 55, 0.2); color: white; padding: 10px 20px; border-radius: 50px; font-size: 0.9rem; cursor: pointer; transition: 0.4s; backdrop-filter: blur(5px); }
         .modal-filter-btn:hover, .modal-filter-btn.active { background: var(--gold-gradient); color: var(--deep-purple); font-weight: 800; border-color: transparent; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
+        @keyframes fadeInItem { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .modal-portfolio-item { opacity: 0; }
 
-        /* --- الشات المباشر --- */
-        .chat-widget-btn { position: fixed; bottom: 20px; left: 20px; width: 60px; height: 60px; border-radius: 50%; background: var(--gold-gradient); color: var(--deep-purple); font-size: 1.6rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 5px 25px rgba(212, 175, 55, 0.4); z-index: 9998; border: none; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); animation: chatPulse 2.5s infinite; }
+        .chat-widget-btn { position: fixed; bottom: 25px; left: 25px; width: 60px; height: 60px; border-radius: 50%; background: var(--gold-gradient); color: var(--deep-purple); font-size: 1.6rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 5px 25px rgba(212, 175, 55, 0.4); z-index: 9998; border: none; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); animation: chatPulse 2.5s infinite; }
         .chat-widget-btn:hover { transform: scale(1.1) rotate(10deg); }
-        .chat-window { position: fixed; bottom: 90px; left: 20px; width: calc(100% - 40px); max-width: 360px; background: rgba(10, 3, 18, 0.95); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5); z-index: 9998; display: flex; flex-direction: column; overflow: hidden; transform: translateY(30px) scale(0.9); opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform-origin: bottom left; }
+        .chat-window { position: fixed; bottom: 95px; left: 25px; width: calc(100% - 50px); max-width: 360px; background: rgba(10, 3, 18, 0.95); backdrop-filter: blur(25px); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5); z-index: 9998; display: flex; flex-direction: column; overflow: hidden; transform: translateY(30px) scale(0.9); opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform-origin: bottom left; }
         .chat-window.active { transform: translateY(0) scale(1); opacity: 1; visibility: visible; }
         .chat-header { background: rgba(255, 255, 255, 0.03); padding: 15px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(212, 175, 55, 0.1); position: relative; }
         .chat-header-img { width: 40px; height: 40px; border-radius: 50%; background: var(--gold-gradient); display: flex; align-items: center; justify-content: center; color: var(--deep-purple); font-weight: bold; font-size: 1.1rem; }
@@ -319,8 +256,7 @@
         .chat-msg.user { background: var(--gold-gradient); align-self: flex-end; border-radius: 15px 15px 15px 0; color: var(--deep-purple); font-weight: 800; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2); }
         .typing-indicator { display: flex; gap: 5px; padding: 12px 18px; background: rgba(212, 175, 55, 0.05); border-radius: 15px 15px 0 15px; align-self: flex-start; width: fit-content; }
         .typing-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: typing 1.4s infinite ease-in-out both; opacity: 0.7; }
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; } .typing-dot:nth-child(2) { animation-delay: -0.16s; }
         .whatsapp-transfer-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; background: #25D366; color: white; border: none; padding: 10px 15px; border-radius: 10px; cursor: pointer; font-family: inherit; font-size: 0.85rem; font-weight: 800; text-decoration: none; transition: 0.3s; width: 100%; justify-content: center; }
         .whatsapp-transfer-btn:hover { background: #1ebd5c; transform: scale(1.02); }
         .chat-footer { padding: 15px; border-top: 1px solid rgba(212, 175, 55, 0.1); background: rgba(0, 0, 0, 0.2); }
@@ -330,64 +266,86 @@
         .chat-send-btn { background: var(--gold-gradient); color: var(--deep-purple); border: none; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; font-size: 1.2rem; flex-shrink: 0; }
         .chat-send-btn:hover { transform: scale(1.1); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4); }
 
-        /* =========================================
-           Media Queries (تطوير تجربة الجوال)
-           ========================================= */
+        .custom-alert-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(10, 3, 18, 0.8); backdrop-filter: blur(5px); z-index: 100000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.3s ease; }
+        .custom-alert-overlay.active { opacity: 1; visibility: visible; }
+        .custom-alert-box { background: rgba(15, 5, 26, 0.95); border: 1px solid var(--gold); border-radius: 20px; padding: 30px; text-align: center; max-width: 350px; width: 90%; transform: scale(0.9) translateY(20px); transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2); }
+        .custom-alert-overlay.active .custom-alert-box { transform: scale(1) translateY(0); }
+        .alert-icon { font-size: 3rem; color: var(--gold); margin-bottom: 15px; }
+        .custom-alert-box p { color: white; font-size: 1rem; margin-bottom: 20px; line-height: 1.5; }
+        .custom-alert-btn { background: var(--gold-gradient); color: var(--deep-purple); border: none; padding: 10px 30px; border-radius: 50px; font-weight: 800; cursor: pointer; transition: 0.3s; font-family: inherit; font-size: 1rem; }
+        .custom-alert-btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4); }
+
         @media (max-width: 768px) {
-            nav { padding: 15px 5%; }
+            nav { padding: 12px 20px; }
             .main-menu { display: none; }
-            .mobile-toggle-btn { display: block; }
-            .visitor-counter span:last-child { display: none; }
+            .mobile-toggle-btn { display: block; font-size: 1.6rem; }
+            .counter-text { display: none; }
+            .visitor-counter { padding: 6px 12px; gap: 6px; font-size: 0.9rem; font-weight: bold; border-radius: 20px; background: rgba(212, 175, 55, 0.1); }
+            .main-logo { width: 260px; }
+            .hero-title { font-size: 1.8rem; line-height: 1.4; padding: 0 10px; }
+            .hero-subtitle { font-size: 0.65rem; letter-spacing: 4px; }
+            .section-title-bg { font-size: 2.8rem; letter-spacing: 5px; }
+            .section-title-main { font-size: 1.6rem; }
+            .contact-card { padding: 30px 15px; border-radius: 20px; }
+            .contact-input { font-size: 15px; padding: 14px 40px 14px 14px; border-radius: 12px; }
+            .luxury-explore-btn { width: 90%; padding: 15px 20px; font-size: 1rem; }
+            .portfolio-grid { padding: 0 15px; gap: 15px; grid-template-columns: 1fr; }
+            .premium-card { border-radius: 20px; }
+            .gallery-content-wrapper { padding: 80px 15px 30px; }
+            .modal-filter-btn { padding: 8px 16px; font-size: 0.85rem; margin-bottom: 5px; }
+            .modal-portfolio-menu { gap: 8px; margin-bottom: 30px; }
+            .chat-widget-btn { width: 50px; height: 50px; font-size: 1.3rem; bottom: 15px; left: 15px; }
+            .chat-window { bottom: 75px; left: 15px; width: calc(100% - 30px); max-height: 70vh; border-radius: 15px; }
+            .chat-body { max-height: 45vh; padding: 10px; }
+            .chat-header { padding: 12px; }
+            .chat-msg { font-size: 0.85rem; padding: 10px 14px; }
+            .chat-input { font-size: 14px; padding: 10px 15px; }
+            .chat-send-btn { width: 40px; height: 40px; font-size: 1rem; }
+            .testimonial-card { min-width: 280px; max-width: 280px; padding: 20px; border-radius: 15px; }
+            .quote-watermark { font-size: 4rem; left: 10px; }
+            .main-footer { padding: 40px 20px 20px; }
+            .footer-container { gap: 25px; }
             
-            .contact-card { padding: 25px 20px; border-radius: 20px; }
-            .section-title-bg { font-size: 3rem; letter-spacing: 5px; }
-            
-            .luxury-explore-btn { width: 100%; justify-content: center; padding: 18px 20px; font-size: 1.05rem; }
-            
-            .portfolio-grid { padding: 0; }
-            .gallery-content-wrapper { padding: 70px 15px 30px; }
-            .modal-portfolio-menu { margin-bottom: 30px; gap: 8px; }
-            
-            .main-footer { padding: 50px 5% 20px; }
-            .footer-container { gap: 30px; }
+            /* تعديلات اليوتيوب للموبايل */
+            .yt-live-widget { padding: 30px 15px; border-radius: 20px; }
+            .live-badge { position: relative; top: 0; left: 0; display: inline-flex; margin-bottom: 20px; }
+            .yt-header { flex-direction: column; text-align: center; }
+            .yt-stat-value { font-size: 2rem; }
         }
     </style>
 </head>
 <body class="loading-active">
 
-    <!-- =========================================
-         شريط التقدم الذهبي (Scroll Progress)
-         ========================================= -->
     <div id="scroll-progress"></div>
 
-    <!-- =========================================
-         شاشة التحميل السينمائية (Cinematic Preloader)
-         ========================================= -->
+    <!-- شاشة التحميل -->
     <div id="preloader">
         <div class="preloader-logo">YASSER GRAPHIC</div>
         <div class="preloader-line"></div>
     </div>
 
-    <!-- باقي الموقع -->
+    <!-- خلفية الحرير -->
     <div class="glass-silk-container">
         <div class="fiber"></div><div class="fiber"></div><div class="fiber"></div><div class="fiber"></div>
         <div class="fiber"></div><div class="fiber"></div><div class="fiber"></div><div class="fiber"></div>
     </div>
 
+    <!-- الهيدر (Nav) -->
     <nav>
-        <div style="font-weight: 800; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.1rem; z-index: 1001;">YASSER GRAPHIC</div>
+        <div class="nav-logo">YASSER GRAPHIC</div>
         
         <ul class="main-menu">
             <li><a href="#">الرئيسية</a></li>
             <li><a href="#contact">اطلب تصميمك</a></li>
             <li><a onclick="openFullGallery()">معرض الأعمال</a></li>
-            <li><a href="#reviews">آراء العملاء</a></li>
+            <li><a href="#youtube-section">قناتنا</a></li>
         </ul>
 
-        <div style="display: flex; align-items: center; gap: 15px; z-index: 1001;">
-            <div class="visitor-counter">
+        <div class="nav-right-actions">
+            <div class="visitor-counter" title="الزوار المتواجدون الآن في الموقع">
                 <span class="pulse-dot"></span>
-                <span>متواجد الآن: <strong id="live-count" style="color: var(--gold);">84</strong></span>
+                <span class="counter-text">متواجد الآن:</span>
+                <strong id="live-count" style="color: var(--gold);">84</strong>
             </div>
             <button class="mobile-toggle-btn" onclick="toggleMobileMenu()">
                 <i class="fa-solid fa-bars-staggered"></i>
@@ -395,14 +353,15 @@
         </div>
     </nav>
 
+    <!-- القائمة الجانبية في الجوال -->
     <div class="mobile-menu-overlay" id="mobile-menu">
-        <button class="mobile-toggle-btn" onclick="toggleMobileMenu()" style="align-self: flex-start; margin-bottom: 20px;">
+        <button class="close-mobile-menu" onclick="toggleMobileMenu()">
             <i class="fa-solid fa-xmark"></i>
         </button>
         <a href="#" onclick="toggleMobileMenu()">الرئيسية</a>
         <a href="#contact" onclick="toggleMobileMenu()">اطلب تصميمك</a>
         <a onclick="openFullGallery(); toggleMobileMenu();">معرض الأعمال</a>
-        <a href="#reviews" onclick="toggleMobileMenu()">آراء العملاء</a>
+        <a href="#youtube-section" onclick="toggleMobileMenu()">قناتنا</a>
     </div>
 
     <section class="hero">
@@ -458,7 +417,7 @@
         </div>
     </section>
 
-    <!-- 2- زر المعرض يليه 3- أبرز الأعمال -->
+    <!-- 2- قسم أبرز الأعمال -->
     <section id="portfolio" style="padding-top: 40px;">
         <div class="section-title-container reveal">
             <div class="section-title-bg">WORKS</div>
@@ -487,7 +446,7 @@
             <a href="#" class="card-link reveal delay-300">
                 <div class="premium-card">
                     <div style="height: 200px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
-                        <span style="font-size: 2rem; color: var(--gold); opacity: 0.3;">Y</span>
+                        <span style="font-size: 3rem; color: var(--gold); opacity: 0.3;">Y</span>
                     </div>
                     <div style="padding: 20px; text-align: center;">
                         <h3 style="color: var(--gold); font-size: 1.1rem;">هوية بصرية متكاملة</h3>
@@ -498,8 +457,59 @@
         </div>
     </section>
 
+    <!-- 3- إحصائيات اليوتيوب -->
+    <section id="youtube-section" style="padding-top: 40px;">
+        <div class="section-title-container reveal">
+            <div class="section-title-bg">YOUTUBE</div>
+            <h2 class="section-title-main">إحصائيات القناة المباشرة</h2>
+        </div>
+
+        <div style="display: flex; justify-content: center; padding: 0 5%;" class="reveal delay-100">
+            <div class="yt-live-widget">
+                <div class="widget-content">
+                    
+                    <div class="live-badge">
+                        <span class="dot"></span> LIVE STATS
+                    </div>
+        
+                    <div class="yt-header">
+                        <!-- مسار اللوجو وضعته افتراضياً كما في الهيرو -->
+                        <img src="yaser-logo.png(1).png" alt="Yaser Graphics" id="yt-avatar" class="yt-logo" onerror="this.src='https://via.placeholder.com/60/d4af37/0f051a?text=Y'">
+                        <div class="yt-title">
+                            <h2 id="yt-channel-name">Yaser Graphics</h2>
+                            <p>@yaser_grafhic</p>
+                        </div>
+                    </div>
+        
+                    <div class="yt-stats-container">
+                        <div class="yt-stat-box">
+                            <i class="fa-brands fa-youtube yt-stat-icon"></i>
+                            <div class="yt-stat-value" id="subscribers-count">0</div>
+                            <div class="yt-stat-label">المشتركون</div>
+                        </div>
+        
+                        <div class="yt-stat-box">
+                            <i class="fa-solid fa-eye yt-stat-icon"></i>
+                            <div class="yt-stat-value" id="views-count">0</div>
+                            <div class="yt-stat-label">إجمالي المشاهدات</div>
+                        </div>
+        
+                        <div class="yt-stat-box">
+                            <i class="fa-solid fa-video yt-stat-icon"></i>
+                            <div class="yt-stat-value" id="videos-count">0</div>
+                            <div class="yt-stat-label">عدد الفيديوهات</div>
+                        </div>
+                    </div>
+        
+                    <div class="status-msg" id="status-text">جاري الاتصال بخوادم يوتيوب...</div>
+        
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 4- آراء العملاء -->
-    <section id="reviews">
+    <section id="reviews" style="padding-top: 40px;">
         <div class="section-title-container reveal">
             <div class="section-title-bg">REVIEWS</div>
             <h2 class="section-title-main">ثقة المبدعين</h2>
@@ -565,6 +575,7 @@
         </div>
     </section>
 
+    <!-- الفوتر -->
     <footer class="main-footer">
         <div class="footer-container">
             <div class="footer-col reveal delay-100">
@@ -577,7 +588,7 @@
                     <li><a href="#">الرئيسية</a></li>
                     <li><a href="#contact">اطلب تصميمك</a></li>
                     <li><a onclick="openFullGallery()">معرض الأعمال</a></li>
-                    <li><a href="#reviews">آراء العملاء</a></li>
+                    <li><a href="#youtube-section">قناتنا</a></li>
                 </ul>
             </div>
             <div class="footer-col reveal delay-300">
@@ -641,7 +652,7 @@
 
         <div class="gallery-content-wrapper">
             <div class="section-title-container">
-                <div class="section-title-bg" style="font-size: clamp(3rem, 10vw, 6rem);">GALLERY</div>
+                <div class="section-title-bg" style="font-size: clamp(2.5rem, 10vw, 6rem);">GALLERY</div>
                 <h2 class="section-title-main">المعرض المتكامل</h2>
                 <p style="opacity: 0.6; margin-top: 10px;">اكتشف عالمنا الإبداعي بجميع تفاصيله</p>
             </div>
@@ -729,69 +740,31 @@
                     </div>
                 </a>
 
-                <a href="#" class="card-link modal-portfolio-item social">
-                    <div class="premium-card">
-                        <div style="height: 220px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
-                            <span style="font-size: 3rem; color: var(--gold); opacity: 0.3;"><i class="fa-brands fa-x-twitter"></i></span>
-                        </div>
-                        <div style="padding: 20px; text-align: center;">
-                            <h3 style="color: var(--gold); font-size: 1.1rem;">تغطية منصة إكس</h3>
-                            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">سوشيال ميديا</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="#" class="card-link modal-portfolio-item prints">
-                    <div class="premium-card">
-                        <div style="height: 220px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
-                            <span style="font-size: 3rem; color: var(--gold); opacity: 0.3;"><i class="fa-solid fa-book-open"></i></span>
-                        </div>
-                        <div style="padding: 20px; text-align: center;">
-                            <h3 style="color: var(--gold); font-size: 1.1rem;">تصميم منيو مطعم</h3>
-                            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">مطبوعات</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="#" class="card-link modal-portfolio-item branding">
-                    <div class="premium-card">
-                        <div style="height: 220px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
-                            <span style="font-size: 3rem; color: var(--gold); opacity: 0.3;"><i class="fa-solid fa-bag-shopping"></i></span>
-                        </div>
-                        <div style="padding: 20px; text-align: center;">
-                            <h3 style="color: var(--gold); font-size: 1.1rem;">هوية متجر إلكتروني</h3>
-                            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">هويات بصرية</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="#" class="card-link modal-portfolio-item logos">
-                    <div class="premium-card">
-                        <div style="height: 220px; background: rgba(255,255,255,0.01); display: flex; align-items: center; justify-content: center;">
-                            <span style="font-size: 3rem; color: var(--gold); opacity: 0.3;"><i class="fa-solid fa-mug-hot"></i></span>
-                        </div>
-                        <div style="padding: 20px; text-align: center;">
-                            <h3 style="color: var(--gold); font-size: 1.1rem;">شعار مقهى مختص</h3>
-                            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">شعارات</p>
-                        </div>
-                    </div>
-                </a>
-
             </div>
         </div>
     </div>
 
+    <!-- نافذة رسالة التنبيه المخصصة -->
+    <div class="custom-alert-overlay" id="custom-alert">
+        <div class="custom-alert-box">
+            <i class="fa-solid fa-circle-exclamation alert-icon"></i>
+            <p id="custom-alert-message">الرجاء تعبئة البيانات</p>
+            <button onclick="closeCustomAlert()" class="custom-alert-btn">حسناً</button>
+        </div>
+    </div>
+
     <script>
-        // إزالة كلاس loading-active لإخفاء شاشة التحميل وإعادة التمرير
+        // ==========================================
+        // 1. الوظائف الأساسية للموقع
+        // ==========================================
         window.addEventListener('load', function() {
             setTimeout(function() {
                 const preloader = document.getElementById('preloader');
                 preloader.classList.add('hide');
                 document.body.classList.remove('loading-active');
-            }, 1500); // 1.5 ثانية لشاشة التحميل السينمائية
+            }, 1500); 
         });
 
-        // حركة شريط التقدم الذهبي
         window.addEventListener('scroll', function() {
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -808,7 +781,32 @@
                 });
             }, revealOptions);
             reveals.forEach(reveal => revealOnScroll.observe(reveal));
+
+            init3DTilt();
         });
+
+        // تأثير البُعد الثالث للبطاقات
+        function init3DTilt() {
+            const cards = document.querySelectorAll('.premium-card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -20; 
+                    const rotateY = ((x - centerX) / centerX) * 20;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+                    card.style.setProperty('--mouseX', `${x}px`);
+                    card.style.setProperty('--mouseY', `${y}px`);
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                });
+            });
+        }
 
         const track = document.getElementById('track');
         track.innerHTML += track.innerHTML;
@@ -824,15 +822,35 @@
             document.getElementById('mobile-menu').classList.toggle('active');
         }
 
+        // ==========================================
+        // 2. نظام التنبيهات والواتساب
+        // ==========================================
+        function showCustomAlert(msg) {
+            document.getElementById('custom-alert-message').innerText = msg;
+            document.getElementById('custom-alert').classList.add('active');
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('custom-alert').classList.remove('active');
+        }
+
         function sendToWhatsApp() {
             const name = document.getElementById('client_name').value;
             const service = document.getElementById('service_type').value;
             const details = document.getElementById('project_details').value;
-            if(!name || !details) return alert("ياهلا حياك الله، رجاءً عبي البيانات");
+            
+            if(!name || !details) {
+                showCustomAlert("ياهلا حياك الله، رجاءً تعبئة بيانات الاسم والتفاصيل لنتمكن من خدمتك بشكل أفضل.");
+                return;
+            }
+            
             const message = `مرحباً أستاذ ياسر،%0aاستفسار عن طلب جديد:%0a*الأسم:* ${name}%0a*الخدمة:* ${service}%0a*التفاصيل:* ${details}`;
             window.open(`https://wa.me/966593791001?text=${message}`, '_blank');
         }
 
+        // ==========================================
+        // 3. المساعد الذكي
+        // ==========================================
         let chatStep = 0;
         let userConversation = [];
 
@@ -866,13 +884,11 @@
                     chatStep++;
                 } else if (chatStep === 1) {
                     let summaryText = encodeURIComponent(`مرحباً أستاذ ياسر،\nهذه تفاصيل طلبي من المساعد الذكي بالموقع:\n\n${userConversation.join('\n\n')}`);
-                    
                     let replyHtml = `ممتاز جداً! سجلت كافة تفاصيل طلبك وعندي تصور رائع له.<br><br>
-                    حتى أتمكن من إرسال عرض السعر وتأكيد التفاصيل معك بشكل شخصي، تفضل بالانتقال لمحادثتي على الواتساب بضغطة زر (الملخص جاهز تلقائياً):<br>
+                    حتى أتمكن من إرسال عرض السعر وتأكيد التفاصيل معك بشكل شخصي، تفضل بالانتقال لمحادثتي على الواتساب بضغطة زر:<br>
                     <a href="https://wa.me/966593791001?text=${summaryText}" target="_blank" class="whatsapp-transfer-btn">
                         <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i> إكمال المحادثة شخصياً
                     </a>`;
-                    
                     appendMessage(replyHtml, 'bot');
                     chatStep++;
                 } else {
@@ -905,6 +921,9 @@
             if (typingDiv) typingDiv.remove();
         }
 
+        // ==========================================
+        // 4. معرض الأعمال المنبثق
+        // ==========================================
         function openFullGallery() {
             const gallery = document.getElementById('full-gallery');
             gallery.classList.add('active');
@@ -916,6 +935,7 @@
                 item.offsetHeight; 
                 item.style.animation = `fadeInItem 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards ${index * 0.1}s`;
             });
+            setTimeout(init3DTilt, 100);
         }
 
         function closeFullGallery() {
@@ -943,6 +963,122 @@
                 }
             });
         }
+
+        // ==========================================
+        // 5. سكربت إحصائيات يوتيوب المباشرة (Live Stats)
+        // ==========================================
+        
+        // --- ضع مفتاح الـ API الخاص بك هنا ---
+        const YT_API_KEY = 'AIzaSyCffEG4JLhCvoGozCZ7yLaOpi-wAU-USn8'; 
+        const YT_CHANNEL_HANDLE = '@yaser_grafhic';
+
+        let prevSubs = 0;
+        let prevViews = 0;
+        let prevVideos = 0;
+
+        const formatNumberYT = (num) => {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        };
+
+        function animateYTValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                const currentVal = Math.floor(easeProgress * (end - start) + start);
+                
+                obj.innerHTML = formatNumberYT(currentVal);
+                
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    obj.innerHTML = formatNumberYT(end);
+                    setTimeout(() => obj.classList.remove('updating'), 300);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        async function fetchYouTubeStats() {
+            try {
+                const url = `https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2Cstatistics&forHandle=${YT_CHANNEL_HANDLE}&key=${YT_API_KEY}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.items && data.items.length > 0) {
+                    const channel = data.items[0];
+                    const stats = channel.statistics;
+                    const snippet = channel.snippet;
+
+                    document.getElementById('yt-avatar').src = snippet.thumbnails.default.url;
+                    document.getElementById('yt-channel-name').innerText = snippet.title;
+
+                    const currentSubs = parseInt(stats.subscriberCount) || 0;
+                    const currentViews = parseInt(stats.viewCount) || 0;
+                    const currentVideos = parseInt(stats.videoCount) || 0;
+
+                    const subsEl = document.getElementById('subscribers-count');
+                    const viewsEl = document.getElementById('views-count');
+                    const videosEl = document.getElementById('videos-count');
+
+                    if (currentSubs !== prevSubs) {
+                        subsEl.classList.add('updating');
+                        animateYTValue(subsEl, prevSubs, currentSubs, 1500);
+                        prevSubs = currentSubs;
+                    }
+                    if (currentViews !== prevViews) {
+                        viewsEl.classList.add('updating');
+                        animateYTValue(viewsEl, prevViews, currentViews, 1500);
+                        prevViews = currentViews;
+                    }
+                    if (currentVideos !== prevVideos) {
+                        videosEl.classList.add('updating');
+                        animateYTValue(videosEl, prevVideos, currentVideos, 1500);
+                        prevVideos = currentVideos;
+                    }
+                    document.getElementById('status-text').innerText = `تحديث مباشر - متصل`;
+                } else {
+                    document.getElementById('status-text').innerText = "لم يتم العثور على بيانات القناة.";
+                }
+            } catch (error) {
+                // وضع المحاكاة إذا لم يكن هناك مفتاح API
+                runYTSimulationMode(); 
+            }
+        }
+
+        function runYTSimulationMode() {
+            document.getElementById('status-text').innerText = "وضع المحاكاة الوهمي (بانتظار إضافة مفتاح الـ API الحقيقي)";
+            
+            if(prevSubs === 0) {
+                prevSubs = 12500; prevViews = 450200; prevVideos = 84;
+                animateYTValue(document.getElementById('subscribers-count'), 0, prevSubs, 2000);
+                animateYTValue(document.getElementById('views-count'), 0, prevViews, 2000);
+                animateYTValue(document.getElementById('videos-count'), 0, prevVideos, 2000);
+            } else {
+                let newSubs = prevSubs + Math.floor(Math.random() * 2); 
+                let newViews = prevViews + Math.floor(Math.random() * 5) + 1; 
+                
+                if (newSubs !== prevSubs) {
+                    const el = document.getElementById('subscribers-count');
+                    el.classList.add('updating');
+                    animateYTValue(el, prevSubs, newSubs, 1000);
+                    prevSubs = newSubs;
+                }
+                if (newViews !== prevViews) {
+                    const el = document.getElementById('views-count');
+                    el.classList.add('updating');
+                    animateYTValue(el, prevViews, newViews, 1000);
+                    prevViews = newViews;
+                }
+            }
+        }
+
+        // استدعاء دالة اليوتيوب عند فتح الموقع
+        fetchYouTubeStats();
+        // التحديث كل 15 ثانية لجلب الأرقام المباشرة
+        setInterval(fetchYouTubeStats, 15000); 
+
     </script>
 </body>
 </html>
